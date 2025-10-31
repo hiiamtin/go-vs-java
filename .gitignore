@@ -1,0 +1,96 @@
+# Go specific
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+go.work
+
+# Go module cache
+go.sum
+
+# Java specific
+*.class
+*.jar
+*.war
+*.ear
+*.iml
+*.ipr
+*.iws
+.classpath
+.project
+.settings/
+.mvn/
+target/
+!target/mvn-archiver/pom.properties
+
+# IDE specific
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS specific
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Docker
+.dockerignore
+
+# Logs
+*.log
+logs/
+
+# Database
+*.db
+*.sqlite
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Build artifacts
+build/
+dist/
+bin/
+
+# Node modules (if any)
+node_modules/
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# k6 output files
+*.k6-output.html
+*.k6-output.json
+
+# Test results
+test-results/
+coverage.out
+
+# PostgreSQL data
+pgdata/
+
+# Performance test results
+performance-results/
+*.csv
+```</think>
+<tool_call>terminal
+<arg_key>command</arg_key>
+<arg_value>git add .</arg_value>
+<arg_key>cd</arg_key>
+<arg_value>/Users/rattanaritprasomsab/rattanarit-data/ai/poc/go_vs_java</arg_value>
+</tool_call>
