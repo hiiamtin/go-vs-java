@@ -4,7 +4,7 @@ FROM golang:alpine AS builder
 WORKDIR /app
 
 # Copy go mod and source code
-COPY gin-app/ .
+COPY ./ .
 
 # Download dependencies and build
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -a -installsuffix cgo -o main .
