@@ -8,7 +8,7 @@ echo "========================================="
 
 # Build Fiber application
 echo "📦 Building Fiber application..."
-docker build --platform linux/arm64 -t fiber-app -f Dockerfile .
+docker build --platform linux/arm64 -t fiber-app -f fiber.Dockerfile .
 
 if [ $? -ne 0 ]; then
     echo "❌ Docker build failed!"
