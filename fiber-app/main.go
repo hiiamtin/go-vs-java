@@ -89,9 +89,7 @@ func main() {
 	defer db.Close()
 
 	// Initialize Fiber app
-	app := fiber.New(fiber.Config{
-		DisableStartupMessage: true,
-	})
+	app := fiber.New()
 
 	// API 1: GET /plaintext - Returns "Hello, World!"
 	app.Get("/plaintext", func(c *fiber.Ctx) error {
@@ -105,7 +103,7 @@ func main() {
 		if err := c.BodyParser(&jsonBody); err != nil {
 			return c.Status(http.StatusBadRequest).JSON(fiber.Map{"error": "Invalid JSON"})
 		}
-		return c.Status(http.StatusOK).JSON(StatusResponse{Status: "ok"})
+		return c.Status(http.StatusOK).JSON(&StatusResponse{Status: "ok"})
 	})
 
 	// API 3: POST /cpu - CPU intensive work
@@ -116,7 +114,7 @@ func main() {
 		}
 
 		result := perform_cpu_work(req.Name)
-		return c.Status(http.StatusOK).JSON(CPUResponse{ProcessedName: result})
+		return c.Status(http.StatusOK).JSON(&CPUResponse{ProcessedName: result})
 	})
 
 	// API 4: GET /db - Database read test
@@ -132,7 +130,7 @@ func main() {
 			return c.Status(http.StatusInternalServerError).JSON(fiber.Map{"error": "Database error"})
 		}
 
-		return c.Status(http.StatusOK).JSON(user)
+		return c.Status(http.StatusOK).JSON(&user)
 	})
 
 	// API 5: POST /interaction - Realistic transaction (main test)
@@ -215,7 +213,7 @@ func main() {
 
 	// Health check endpoint
 	app.Get("/health", func(c *fiber.Ctx) error {
-		return c.Status(http.StatusOK).JSON(fiber.Map{"status": "healthy"})
+		return c.Status(http.StatusOK).JSON(&fiber.Map{"status": "healthy"})
 	})
 
 	// Start server
