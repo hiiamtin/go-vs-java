@@ -9,6 +9,8 @@ This document defines the five REST API endpoints that will be implemented ident
 - **Response Format:** JSON (except API 1)
 - **Error Handling:** HTTP status codes + JSON error message
 - **Database:** PostgreSQL connection required for APIs 4 and 5
+- **Correlation ID:** `X-Correlation-ID` header handled globally (all APIs)
+- **Database Layer:** GORM ORM implemented (migrated from raw SQL)
 
 ## API 1: Plaintext Response
 **Purpose:** Test pure HTTP overhead without JSON processing
@@ -38,6 +40,7 @@ Host: localhost:8080
 HTTP/1.1 200 OK
 Content-Type: text/plain
 Content-Length: 13
+X-Correlation-Id: [uuid-or-provided-value]
 
 Hello, World!
 ```
@@ -82,6 +85,7 @@ Content-Type: application/json
 HTTP/1.1 200 OK
 Content-Type: application/json
 Content-Length: 16
+X-Correlation-Id: [uuid-or-provided-value]
 
 {"status": "ok"}
 ```
@@ -300,6 +304,8 @@ Content-Type: application/json
 - **Password:** poc_password
 - **Pool Size:** Minimum 10 connections
 - **Network:** Must connect to Docker network `poc-net`
+- **ORM:** GORM v1.31.0 with PostgreSQL driver
+- **Connection String:** `host=db user=poc_user password=poc_password dbname=poc_db port=5432 sslmode=disable TimeZone=UTC`
 
 ### Tables Required
 - `users` (100 pre-populated records)
@@ -310,16 +316,20 @@ Content-Type: application/json
 1. **API 5** must use proper database transactions
 2. All operations must be atomic - rollback on any failure
 3. Connection pooling must be configured
-4. Prepared statements should be used for queries
+4. GORM ORM operations must be used (no raw SQL)
 5. Transaction isolation level: READ COMMITTED
+6. Correlation ID middleware must be applied globally
+7. Table name overrides must be implemented (users, interaction_log)
 
 ### Implementation Notes
 - API 5 is the **primary performance metric** - Realistic Transaction
 - Other APIs are micro-benchmarks to isolate specific bottlenecks
-- All implementations must use the same database schema
+- All implementations must use same database schema and GORM ORM
 - Transaction handling must be equivalent across frameworks
 - Error responses should be consistent in format and timing
 - **Mac OS Single-Machine Setup:** Database hostname must be `db` not `localhost` to work with Docker networking
+- **GORM Benefits:** Type-safe operations, automatic struct mapping, consistent error handling
+- **Correlation ID:** Supports request tracing across all endpoints for enhanced debugging
 
 ## Testing Validation
 ### Success Criteria
@@ -337,3 +347,55 @@ Content-Type: application/json
 5. **Consistency Tests:** Identical behavior across frameworks
 
 These specifications must be implemented exactly as defined across all four applications to ensure fair and accurate performance comparison.
+
+## Correlation ID Header Specification
+
+### Header Handling (All APIs)
+**Request Header:** `X-Correlation-ID`
+- **If Present:** Echo the same value in response header
+- **If Missing:** Generate UUID v4 and return in response header
+- **Response Header:** Always include `X-Correlation-ID`
+
+### Example Workflow
+**Request without Correlation ID:**
+```http
+POST /interaction HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+
+{"customerId": 10, "note": "test", "type": "CALL"}
+```
+
+**Response with Generated UUID:**
+```http
+HTTP/1.1 201 Created
+Content-Type: application/json
+X-Correlation-Id: 550e8400-e29b-41d4-a716-446655440000
+
+{"id": 123, "customer_id": 10, ...}
+```
+
+**Request with Correlation ID:**
+```http
+POST /interaction HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+X-Correlation-ID: trace-12345
+
+{"customerId": 10, "note": "test", "type": "CALL"}
+```
+
+**Response with Echoed Value:**
+```http
+HTTP/1.1 201 Created
+Content-Type: application/json
+X-Correlation-Id: trace-12345
+
+{"id": 123, "customer_id": 10, ...}
+```
+
+### Implementation Notes
+- **Middleware Pattern:** Apply globally to all routes
+- **Framework Support:** Gin (c.GetHeader/c.Header) and Fiber (c.Get/c.Set)
+- **UUID Generation:** Use github.com/google/uuid for v4 UUIDs
+- **Benefits:** Request tracing, debugging support, distributed system readiness

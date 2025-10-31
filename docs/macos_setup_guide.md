@@ -3,6 +3,12 @@
 ## Overview
 This guide covers the specific requirements for running the Go vs Java Performance POC on a single Mac OS machine (Apple Silicon). The setup differs from a standard multi-machine deployment due to Docker networking limitations and resource contention.
 
+**Recent Enhancements:**
+- All Go applications now use GORM ORM for database operations
+- Correlation ID middleware implemented globally for request tracing
+- Enhanced observability and debugging capabilities
+- Production-ready Docker builds with arm64 optimization
+
 ## Key Differences
 
 ### Network Configuration
@@ -24,11 +30,18 @@ This guide covers the specific requirements for running the Go vs Java Performan
 ## Implementation Requirements
 
 ### Database Configuration
-All applications must connect using:
+All applications must connect using GORM ORM:
 ```go
-// Go Example
-dsn := "host=db user=poc_user password=poc_password dbname=poc_db port=5432 sslmode=disable"
+// Go Example (Current Implementation)
+dsn := "host=db user=poc_user password=poc_password dbname=poc_db port=5432 sslmode=disable TimeZone=UTC"
+db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 ```
+
+**GORM Implementation Notes:**
+- Uses `gorm.io/driver/postgres` driver
+- TimeZone=UTC parameter for consistent timestamp handling
+- Automatic connection pooling and prepared statements
+- Type-safe database operations via struct mapping
 
 ```java
 // Java Example
@@ -134,13 +147,26 @@ curl http://localhost:8080/plaintext
 
 ## Build Considerations
 
-### Go Applications
+### Go Applications (Enhanced with GORM & Correlation ID)
 ```dockerfile
 # Use arm64-specific base images
 FROM --platform=linux/arm64 golang:alpine AS builder
+COPY go.mod go.sum ./
+RUN go mod download
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -a -installsuffix cgo -o main .
 # ... build stages ...
 FROM --platform=linux/arm64 gcr.io/distroless/static-debian11
+COPY --from=builder /app/main .
+EXPOSE 8080
+CMD ["./main"]
 ```
+
+**Enhanced Features:**
+- GORM ORM integration for type-safe database operations
+- Correlation ID middleware for request tracing
+- UUID generation using `github.com/google/uuid`
+- Optimized multi-stage builds for arm64 architecture
 
 ### Java Applications
 ```dockerfile
@@ -191,5 +217,14 @@ docker stats poc-app --no-stream
 - **Efficiency:** Resource usage patterns
 - **Startup Time:** Cold start comparisons
 - **Memory Footprint:** Base vs load consumption
+- **Correlation Tracing:** Request tracking across all endpoints
+- **Database Performance:** GORM ORM efficiency measurements
+- **Enterprise Features:** Correlation ID overhead analysis
+
+**Enhanced Metrics Available:**
+- Request correlation across all 5 endpoints
+- Database operation performance with GORM
+- UUID generation overhead measurement
+- Middleware processing impact
 
 This setup provides fair comparative data while acknowledging the limitations of single-machine testing.

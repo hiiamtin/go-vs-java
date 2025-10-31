@@ -1,7 +1,13 @@
 # JSON Payload Specifications
 
 ## Overview
-This document defines the JSON payload structures that will be used across all four POC applications for API testing and performance benchmarking.
+This document defines JSON payload structures that will be used across all four POC applications for API testing and performance benchmarking.
+
+**Enhanced Features:**
+- All payloads now support correlation ID header tracing
+- Validated in both Gin and Fiber Go applications
+- Ready for Spring Boot and Quarkus implementation
+- Enhanced error handling and validation requirements
 
 ## Payload 1: LargeJSON
 Used for API 2 (`POST /json`) to test JSON parsing/serialization performance with complex data structures.
@@ -10,6 +16,8 @@ Used for API 2 (`POST /json`) to test JSON parsing/serialization performance wit
 - Complex customer object with 50+ fields
 - Includes nested objects, arrays, various data types
 - Represents realistic CRM customer data
+- **Validated in:** Gin and Fiber applications with correlation ID support
+- **JSON Parsing Test:** Used to measure framework JSON handling performance
 
 ### JSON Schema
 ```json
@@ -162,11 +170,16 @@ Used for API 5 (`POST /interaction`) - the main realistic transaction test that 
 - `type` should be one of the predefined interaction types
 
 ### Database Mapping
-This payload maps directly to the `interaction_log` table:
-- `customerId` → `customer_id`
-- `note` → `note`
-- `type` → `type`
-- `created_at` → auto-generated timestamp
+This payload maps directly to the `interaction_log` table via GORM:
+- `customerId` → `customer_id` (GORM struct field)
+- `note` → `note` (GORM struct field)
+- `type` → `type` (GORM struct field with validation)
+- `created_at` → auto-generated timestamp (GORM autoCreateTime)
+
+**GORM Implementation Notes:**
+- Uses GORM struct tags for proper mapping
+- Automatic type conversion and validation
+- Integrated with correlation ID middleware for tracing
 
 ## Testing Considerations
 
@@ -181,6 +194,19 @@ For comprehensive testing, consider these variations:
 - **LargeJSON**: Tests JSON parsing/serialization overhead
 - **InteractionJSON**: Tests database transaction performance
 - Both should be identical across all four implementations
+
+**Current Implementation Status:**
+✅ **Gin Application:** Both payloads validated with correlation ID tracing
+✅ **Fiber Application:** Both payloads validated with correlation ID tracing
+✅ **Database Operations:** GORM ORM with proper struct mapping
+✅ **Error Handling:** Consistent HTTP status codes and JSON responses
+✅ **Performance Testing:** Ready for load testing with k6 scripts
+
+**Testing Enhancements:**
+- Correlation ID header automatically generated/traced for all requests
+- GORM provides type-safe database operations
+- Enhanced error messages for debugging support
+- Production-ready Docker containerization with arm64 support
 
 ### Example Test Cases
 
@@ -210,3 +236,16 @@ For comprehensive testing, consider these variations:
 - `OTHER` - Miscellaneous interaction type
 
 These specifications must be implemented exactly as defined across all four applications to ensure fair performance comparison.
+
+**Ready for Java Implementation:**
+- Go implementations (Gin + Fiber) provide complete reference
+- Both payloads validated with GORM ORM and correlation ID middleware
+- Database schema and business logic fully tested
+- Performance baseline established for Java comparison
+
+**Implementation Requirements for Java Applications:**
+- Use same JSON structures and field names
+- Implement identical validation rules
+- Support correlation ID header functionality
+- Use JPA/Hibernate equivalent to GORM mapping
+- Maintain identical error response formats
