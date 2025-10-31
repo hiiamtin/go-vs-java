@@ -94,7 +94,7 @@ echo "POST /json"
 
 json_response=$(curl -s -w "\nHTTP_CODE:%{http_code}" -X POST \
     -H "Content-Type: application/json" \
-    -d '{"customerId":12345,"personalInfo":{"firstName":"John","lastName":"Smith","email":"john.smith@example.com","address":{"street":"123 Main St","city":"New York","state":"NY"}}' \
+    -d '{"customerId":12345,"personalInfo":{"firstName":"John","lastName":"Smith","email":"john.smith@example.com","address":{"street":"123 Main St","city":"New York","state":"NY"}}}' \
     http://localhost:8080/json)
 
 http_code=$(echo "$json_response" | grep -o 'HTTP_CODE:[0-9]*' | cut -d: -f2)
