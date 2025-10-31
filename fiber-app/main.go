@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -116,6 +117,14 @@ func main() {
 		if err := c.BodyParser(&jsonBody); err != nil {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid JSON"})
 		}
+
+		// Handle correlation ID
+		correlationId := c.Get("X-Correlation-ID")
+		if correlationId == "" {
+			correlationId = uuid.New().String()
+		}
+		c.Set("X-Correlation-ID", correlationId)
+
 		return c.Status(fiber.StatusOK).JSON(StatusResponse{Status: "ok"})
 	})
 

@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -118,6 +119,14 @@ func main() {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON"})
 			return
 		}
+
+		// Handle correlation ID
+		correlationId := c.GetHeader("X-Correlation-ID")
+		if correlationId == "" {
+			correlationId = uuid.New().String()
+		}
+		c.Header("X-Correlation-ID", correlationId)
+
 		c.JSON(http.StatusOK, StatusResponse{Status: "ok"})
 	})
 
