@@ -6,10 +6,9 @@ import (
 	"encoding/hex"
 	"fmt"
 	"log"
-	"net/http"
 	"time"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 	_ "github.com/lib/pq"
 )
 
@@ -93,7 +92,7 @@ func main() {
 
 	// API 1: GET /plaintext - Returns "Hello, World!"
 	app.Get("/plaintext", func(c *fiber.Ctx) error {
-		c.Set("Content-Type", "text/plain")
+		c.Type("text/plain")
 		return c.SendString("Hello, World!")
 	})
 
@@ -101,20 +100,20 @@ func main() {
 	app.Post("/json", func(c *fiber.Ctx) error {
 		var jsonBody map[string]interface{}
 		if err := c.BodyParser(&jsonBody); err != nil {
-			return c.Status(http.StatusBadRequest).JSON(fiber.Map{"error": "Invalid JSON"})
+			return c.Status(400).JSON(fiber.Map{"error": "Invalid JSON"})
 		}
-		return c.Status(http.StatusOK).JSON(&StatusResponse{Status: "ok"})
+		return c.Status(200).JSON(fiber.Map{"status": "ok"})
 	})
 
 	// API 3: POST /cpu - CPU intensive work
 	app.Post("/cpu", func(c *fiber.Ctx) error {
 		var req CPURequest
 		if err := c.BodyParser(&req); err != nil {
-			return c.Status(http.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request"})
+			return c.Status(400).JSON(fiber.Map{"error": "Invalid request"})
 		}
 
 		result := perform_cpu_work(req.Name)
-		return c.Status(http.StatusOK).JSON(&CPUResponse{ProcessedName: result})
+		return c.Status(200).JSON(fiber.Map{"processed_name": result})
 	})
 
 	// API 4: GET /db - Database read test
@@ -125,19 +124,19 @@ func main() {
 
 		if err != nil {
 			if err == sql.ErrNoRows {
-				return c.Status(http.StatusNotFound).JSON(fiber.Map{"error": "User not found"})
+				return c.Status(404).JSON(fiber.Map{"error": "User not found"})
 			}
-			return c.Status(http.StatusInternalServerError).JSON(fiber.Map{"error": "Database error"})
+			return c.Status(500).JSON(fiber.Map{"error": "Database error"})
 		}
 
-		return c.Status(http.StatusOK).JSON(&user)
+		return c.Status(200).JSON(user)
 	})
 
 	// API 5: POST /interaction - Realistic transaction (main test)
 	app.Post("/interaction", func(c *fiber.Ctx) error {
 		var req InteractionRequest
 		if err := c.BodyParser(&req); err != nil {
-			return c.Status(http.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request"})
+			return c.Status(400).JSON(fiber.Map{"error": "Invalid request"})
 		}
 
 		// Validate interaction type
@@ -146,7 +145,7 @@ func main() {
 			"PURCHASE": true, "SUPPORT": true, "OTHER": true,
 		}
 		if !validTypes[req.Type] {
-			return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			return c.Status(400).JSON(fiber.Map{
 				"error": "Invalid interaction type. Must be one of: CALL, EMAIL, MEETING, PURCHASE, SUPPORT, OTHER",
 				"code":  "INVALID_INTERACTION_TYPE",
 			})
@@ -155,7 +154,7 @@ func main() {
 		// Start database transaction
 		tx, err := db.Begin()
 		if err != nil {
-			return c.Status(http.StatusInternalServerError).JSON(fiber.Map{"error": "Transaction failed"})
+			return c.Status(500).JSON(fiber.Map{"error": "Transaction failed"})
 		}
 
 		// Read user to verify exists
@@ -165,12 +164,12 @@ func main() {
 		if err != nil {
 			tx.Rollback()
 			if err == sql.ErrNoRows {
-				return c.Status(http.StatusNotFound).JSON(fiber.Map{
+				return c.Status(404).JSON(fiber.Map{
 					"error": fmt.Sprintf("Customer with ID %d not found", req.CustomerID),
 					"code":  "CUSTOMER_NOT_FOUND",
 				})
 			}
-			return c.Status(http.StatusInternalServerError).JSON(fiber.Map{"error": "Database error"})
+			return c.Status(500).JSON(fiber.Map{"error": "Database error"})
 		}
 
 		// Insert interaction log
@@ -181,20 +180,20 @@ func main() {
 		).Scan(&interactionID)
 		if err != nil {
 			tx.Rollback()
-			return c.Status(http.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to create interaction"})
+			return c.Status(500).JSON(fiber.Map{"error": "Failed to create interaction"})
 		}
 
 		// Update user's last contact date
 		_, err = tx.Exec("UPDATE users SET last_contact_date = NOW() WHERE id = $1", req.CustomerID)
 		if err != nil {
 			tx.Rollback()
-			return c.Status(http.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to update user"})
+			return c.Status(500).JSON(fiber.Map{"error": "Failed to update user"})
 		}
 
 		// Commit transaction
 		err = tx.Commit()
 		if err != nil {
-			return c.Status(http.StatusInternalServerError).JSON(fiber.Map{"error": "Transaction commit failed"})
+			return c.Status(500).JSON(fiber.Map{"error": "Transaction commit failed"})
 		}
 
 		// Return created interaction
@@ -205,15 +204,15 @@ func main() {
 		).Scan(&interaction.ID, &interaction.CustomerID, &interaction.Note, &interaction.Type, &interaction.CreatedAt)
 
 		if err != nil {
-			return c.Status(http.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to retrieve created interaction"})
+			return c.Status(500).JSON(fiber.Map{"error": "Failed to retrieve created interaction"})
 		}
 
-		return c.Status(http.StatusCreated).JSON(interaction)
+		return c.Status(201).JSON(interaction)
 	})
 
 	// Health check endpoint
 	app.Get("/health", func(c *fiber.Ctx) error {
-		return c.Status(http.StatusOK).JSON(&fiber.Map{"status": "healthy"})
+		return c.Status(200).JSON(fiber.Map{"status": "healthy"})
 	})
 
 	// Start server
