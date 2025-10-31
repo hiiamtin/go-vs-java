@@ -2,35 +2,44 @@ package main
 
 import (
 	"crypto/sha256"
-	"database/sql"
 	"encoding/hex"
 	"fmt"
 	"log"
 	"net/http"
-
 	"time"
 
 	"github.com/gin-gonic/gin"
-	_ "github.com/lib/pq"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
-var db *sql.DB
+var db *gorm.DB
 
 // User struct for database operations
 type User struct {
-	ID              int        `json:"id"`
-	Name            string     `json:"name"`
-	Email           string     `json:"email"`
+	ID              int        `json:"id" gorm:"primaryKey;autoIncrement"`
+	Name            string     `json:"name" gorm:"not null"`
+	Email           string     `json:"email" gorm:"not null;unique"`
 	LastContactDate *time.Time `json:"last_contact_date"`
 }
 
 // InteractionLog struct for database operations
 type InteractionLog struct {
-	ID         int       `json:"id"`
-	CustomerID int       `json:"customer_id"`
-	Note       string    `json:"note"`
-	Type       string    `json:"type"`
-	CreatedAt  time.Time `json:"created_at"`
+	ID         int       `json:"id" gorm:"primaryKey;autoIncrement"`
+	CustomerID int       `json:"customer_id" gorm:"not null;index"`
+	Note       string    `json:"note" gorm:"type:text"`
+	Type       string    `json:"type" gorm:"not null"`
+	CreatedAt  time.Time `json:"created_at" gorm:"autoCreateTime"`
+}
+
+// TableName specifies the table name for GORM
+func (InteractionLog) TableName() string {
+	return "interaction_log"
+}
+
+// TableName specifies the table name for GORM
+func (User) TableName() string {
+	return "users"
 }
 
 // CPU work request
@@ -70,13 +79,19 @@ func perform_cpu_work(input string) string {
 func initDatabase() {
 	var err error
 	// Database connection for Mac OS Docker setup
-	dbURL := "host=db user=poc_user password=poc_password dbname=poc_db port=5432 sslmode=disable"
-	db, err = sql.Open("postgres", dbURL)
+	dsn := "host=db user=poc_user password=poc_password dbname=poc_db port=5432 sslmode=disable TimeZone=UTC"
+	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatal("Failed to connect to database:", err)
 	}
 
-	err = db.Ping()
+	// Test the connection
+	sqlDB, err := db.DB()
+	if err != nil {
+		log.Fatal("Failed to get database instance:", err)
+	}
+
+	err = sqlDB.Ping()
 	if err != nil {
 		log.Fatal("Failed to ping database:", err)
 	}
@@ -87,7 +102,6 @@ func initDatabase() {
 func main() {
 	// Initialize database connection
 	initDatabase()
-	defer db.Close()
 
 	// Initialize Gin router
 	r := gin.Default()
@@ -122,11 +136,9 @@ func main() {
 	// API 4: GET /db - Database read test
 	r.GET("/db", func(c *gin.Context) {
 		var user User
-		err := db.QueryRow("SELECT id, name, email, last_contact_date FROM users WHERE id = $1", 10).
-			Scan(&user.ID, &user.Name, &user.Email, &user.LastContactDate)
-
+		err := db.First(&user, 10).Error
 		if err != nil {
-			if err == sql.ErrNoRows {
+			if err == gorm.ErrRecordNotFound {
 				c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
 				return
 			}
@@ -159,19 +171,18 @@ func main() {
 		}
 
 		// Start database transaction
-		tx, err := db.Begin()
-		if err != nil {
+		tx := db.Begin()
+		if tx.Error != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Transaction failed"})
 			return
 		}
 
-		// Read user to verify exists
+		// Read user to verify exists (with pessimistic lock)
 		var user User
-		err = tx.QueryRow("SELECT id FROM users WHERE id = $1 FOR UPDATE", req.CustomerID).
-			Scan(&user.ID)
+		err := tx.Set("gorm:query_option", "FOR UPDATE").First(&user, req.CustomerID).Error
 		if err != nil {
 			tx.Rollback()
-			if err == sql.ErrNoRows {
+			if err == gorm.ErrRecordNotFound {
 				c.JSON(http.StatusNotFound, gin.H{
 					"error": fmt.Sprintf("Customer with ID %d not found", req.CustomerID),
 					"code":  "CUSTOMER_NOT_FOUND",
@@ -183,11 +194,12 @@ func main() {
 		}
 
 		// Insert interaction log
-		var interactionID int
-		err = tx.QueryRow(
-			"INSERT INTO interaction_log (customer_id, note, type, created_at) VALUES ($1, $2, $3, NOW()) RETURNING id",
-			req.CustomerID, req.Note, req.Type,
-		).Scan(&interactionID)
+		interaction := InteractionLog{
+			CustomerID: req.CustomerID,
+			Note:       req.Note,
+			Type:       req.Type,
+		}
+		err = tx.Create(&interaction).Error
 		if err != nil {
 			tx.Rollback()
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create interaction"})
@@ -195,7 +207,8 @@ func main() {
 		}
 
 		// Update user's last contact date
-		_, err = tx.Exec("UPDATE users SET last_contact_date = NOW() WHERE id = $1", req.CustomerID)
+		now := time.Now()
+		err = tx.Model(&user).Update("last_contact_date", &now).Error
 		if err != nil {
 			tx.Rollback()
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user"})
@@ -203,19 +216,14 @@ func main() {
 		}
 
 		// Commit transaction
-		err = tx.Commit()
+		err = tx.Commit().Error
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Transaction commit failed"})
 			return
 		}
 
 		// Return the created interaction
-		var interaction InteractionLog
-		err = db.QueryRow(
-			"SELECT id, customer_id, note, type, created_at FROM interaction_log WHERE id = $1",
-			interactionID,
-		).Scan(&interaction.ID, &interaction.CustomerID, &interaction.Note, &interaction.Type, &interaction.CreatedAt)
-
+		err = db.First(&interaction, interaction.ID).Error
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve created interaction"})
 			return
