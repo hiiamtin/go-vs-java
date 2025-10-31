@@ -77,7 +77,7 @@
 
 ### Task 7: Create Java Dockerfiles
 - [x] spring-jvm.Dockerfile (Temurin 17 JRE Jammy) - arm64 platform
-- [ ] quarkus-native.Dockerfile (multi-stage native) - arm64 platform
+- [x] quarkus-native.Dockerfile (multi-stage native) - arm64 platform with pre-build runner stage
 
 ### Task 8: Provision Database ✅ COMPLETED
 - [x] docker-compose.yml for PostgreSQL on custom `poc-net` network
@@ -89,12 +89,12 @@
 - [x] Custom network `poc-net` created and functional
 
 ### Task 9: Create Load Test Scripts
-- [ ] plaintext_test.js (target: localhost:8080)
-- [ ] json_test.js (target: localhost:8080)
-- [ ] cpu_test.js (target: localhost:8080)
-- [ ] db_test.js (target: localhost:8080)
-- [ ] interaction_test.js (target: localhost:8080)
-- [ ] Reduced load profile: 100 users (from 200) due to resource contention
+- [x] plaintext_test.js (target: localhost:8080)
+- [x] json_test.js (target: localhost:8080)
+- [x] cpu_test.js (target: localhost:8080)
+- [x] db_test.js (target: localhost:8080)
+- [x] interaction_test.js (target: localhost:8080)
+- [x] Reduced load profile: 100 users (from 200) due to resource contention
 
 ---
 
@@ -131,10 +131,9 @@
 
 ## Current Focus
 **NEXT ACTIONS:**
-1. **Java_Specialist:** Start Task 5 - Create Quarkus application (database: `db` hostname)
-2. **DevOps_Engineer:** Finish Task 7 - quarkus-native Dockerfile
-3. **DevOps_Engineer:** Start Task 9 - Create Load Test Scripts
-4. Both specialists must follow specifications in `/docs/` exactly
+1. **DevOps_Engineer:** Kick off Task 10 by building all four images and capturing arm64 metadata.
+2. **Performance_Analyst:** Prepare execution plan for Task 11 (load test runs) leveraging the new k6 scripts.
+3. **Project_Manager:** Define data capture templates for COMPARISON_REPORT.md ahead of Task 12.
 
 **COMPLETED GO APPLICATIONS READY FOR COMPARISON:**
 ✅ **Gin Application:** Production-ready with GORM + Correlation ID middleware
@@ -193,6 +192,11 @@
    - Pessimistic locking + transactional flow matches Gin/Fiber
    - Snake_case JSON responses aligned for test harness
    - Arm64-ready Docker build using Eclipse Temurin base
+
+✅ **Quarkus Native Build Flow**: Docker build now consumes pre-built native runner
+   - Test script auto-rebuilds native binary when sources change
+   - Keeps Dockerfile multi-stage while avoiding private image pulls
+   - Ensures linux/arm64 runtime image stays minimal and reproducible
 
 **READY FOR NEXT PHASE:** Java development and remaining Phase 2 tasks
 

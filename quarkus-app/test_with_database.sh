@@ -11,7 +11,7 @@ cd "$SCRIPT_DIR"
 echo "🧪 Testing Quarkus Application (Native) with Database"
 echo "===================================================="
 
-echo "⚙️  Building native executable (may trigger container build)..."
+echo "⚙️  Ensuring native runner is up to date..."
 BUILD_LOG="native-build.log"
 
 RUNNER="target/quarkus-poc-1.0.0-runner"
