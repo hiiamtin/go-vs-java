@@ -50,8 +50,8 @@ The final deliverable is a markdown report (`COMPARISON_REPORT.md`) detailing Th
 
 ### Phase 1: Application Development
 
-**Task 1: Define Shared Logic & Database (Go_Specialist & Java_Specialist)**
-* **CPU Logic:** Define a function `perform_cpu_work(input string) string`. This function must take a string, loop 1,000 times, and perform a SHA-256 hash on it in each loop. This *exact* logic must be replicated in both Go and Java.
+**Task 1: Define Shared Logic & Database (Go_Specialist & Java_Specialist)** ✅ COMPLETED
+* **CPU Logic:** Define a function `perform_cpu_work(input string) string`. This function must take a string, loop 1,000 times, and perform a SHA-256 hash on it in each loop. This *exact* logic must be replicated in both Go and Java. **Git committed with equivalent Go/Java implementations.**
 * **Database Schema:** Define two PostgreSQL tables:
     1.  `users (id SERIAL PRIMARY KEY, name VARCHAR, email VARCHAR, last_contact_date TIMESTAMP)`
     2.  `interaction_log (id SERIAL PRIMARY KEY, customer_id INT, note TEXT, type VARCHAR, created_at TIMESTAMP)`
@@ -198,3 +198,20 @@ The final deliverable is a markdown report (`COMPARISON_REPORT.md`) detailing Th
 **Task 14: Final Review (Project_Manager)**
 * Review `COMPARISON_REPORT.md` for accuracy and completeness, ensuring the "Single Machine Disclaimer" is prominent.
 * Declare the POC complete.
+
+---
+
+## Version Control Strategy:
+```bash
+# Example branching strategy for specialists
+git checkout -b feature/gin-application
+git checkout -b feature/spring-boot-application
+git checkout -b feature/fiber-application
+git checkout -b feature/quarkus-application
+
+# Regular commits as endpoints are implemented
+git add .
+git commit -m "Implement /plaintext and /json endpoints"
+git commit -m "Implement /cpu and /db endpoints"
+git commit -m "Implement /interaction transaction endpoint"
+```
