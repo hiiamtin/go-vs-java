@@ -54,14 +54,16 @@
 - [x] Testing and validation (CPU work hashing parity, DB transaction verified)
 - [x] JSON naming aligned to snake_case for comparison tooling
 
-### Task 5: Create Quarkus Application 🔴 NOT STARTED
-- [ ] Quarkus project initialization
-- [ ] RESTEasy, Hibernate/Panache, PostgreSQL
-- [ ] Native compilation configuration - hostname: `db` (not localhost)
-- [ ] Docker arm64 platform compatibility
-- [ ] Implement all 5 endpoints (JAX-RS)
-- [ ] Implement @Transactional for API 5
-- [ ] Testing and validation
+### Task 5: Create Quarkus Application ✅ COMPLETED
+- [x] Quarkus project initialization (manual scaffold due to offline CLI)
+- [x] RESTEasy Reactive, Hibernate Panache, PostgreSQL configured
+- [x] Implement all 5 endpoints (JAX-RS) with correlation ID filter
+- [x] Implement @Transactional service for API 5
+- [x] JSON snake_case + CPU workload parity
+- [x] Native configuration set for `db` hostname & health endpoint
+- [x] Docker arm64-ready native build pipeline drafted (quarkus-native.Dockerfile)
+ - [x] Local parity test script (`test_with_database.sh`)
+ - [x] End-to-end validation & native compile
 
 ---
 

@@ -87,10 +87,6 @@ pgdata/
 # Performance test results
 performance-results/
 *.csv
-```</think>
-<tool_call>terminal
-<arg_key>command</arg_key>
-<arg_value>git add .</arg_value>
-<arg_key>cd</arg_key>
-<arg_value>/Users/rattanaritprasomsab/rattanarit-data/ai/poc/go_vs_java</arg_value>
-</tool_call>
+
+.quarkus/
+.m2/
