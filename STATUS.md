@@ -44,14 +44,15 @@
 - [x] Comprehensive Docker testing with database
 - [x] All 5 endpoints validated and working
 
-### Task 4: Create Spring Boot Application 🔴 NOT STARTED
-- [ ] Java/Spring project initialization
-- [ ] Spring Web, Data JPA, PostgreSQL driver
-- [ ] Database configuration - hostname: `db` (not localhost)
-- [ ] Docker arm64 platform compatibility
-- [ ] Implement all 5 endpoints with @RestController
-- [ ] Implement @Transactional for API 5
-- [ ] Testing and validation
+### Task 4: Create Spring Boot Application ✅ COMPLETED
+- [x] Java/Spring project initialization
+- [x] Spring Web, Data JPA, PostgreSQL driver
+- [x] Database configuration - hostname: `db` (not localhost)
+- [x] Docker arm64 platform compatibility
+- [x] Implement all 5 endpoints with @RestController
+- [x] Implement @Transactional for API 5
+- [x] Testing and validation (CPU work hashing parity, DB transaction verified)
+- [x] JSON naming aligned to snake_case for comparison tooling
 
 ### Task 5: Create Quarkus Application 🔴 NOT STARTED
 - [ ] Quarkus project initialization
@@ -73,7 +74,7 @@
 - [x] Enhanced observability and tracing capabilities
 
 ### Task 7: Create Java Dockerfiles
-- [ ] spring-jvm.Dockerfile (OpenJDK 17 slim) - arm64 platform
+- [x] spring-jvm.Dockerfile (Temurin 17 JRE Jammy) - arm64 platform
 - [ ] quarkus-native.Dockerfile (multi-stage native) - arm64 platform
 
 ### Task 8: Provision Database ✅ COMPLETED
@@ -128,11 +129,10 @@
 
 ## Current Focus
 **NEXT ACTIONS:**
-1. **Java_Specialist:** Start Task 4 - Create Spring Boot application (database: `db` hostname)
-2. **Java_Specialist:** Start Task 5 - Create Quarkus application (database: `db` hostname)
-3. **DevOps_Engineer:** Start Task 7 - Create Java Dockerfiles
-4. **DevOps_Engineer:** Start Task 9 - Create Load Test Scripts
-5. Both specialists must follow specifications in `/docs/` exactly
+1. **Java_Specialist:** Start Task 5 - Create Quarkus application (database: `db` hostname)
+2. **DevOps_Engineer:** Finish Task 7 - quarkus-native Dockerfile
+3. **DevOps_Engineer:** Start Task 9 - Create Load Test Scripts
+4. Both specialists must follow specifications in `/docs/` exactly
 
 **COMPLETED GO APPLICATIONS READY FOR COMPARISON:**
 ✅ **Gin Application:** Production-ready with GORM + Correlation ID middleware
@@ -165,7 +165,9 @@
 - Phase 1 (Task 1) - 100% ✅
 - Phase 1 (Task 2) - 100% ✅ (Gin Application + GORM + Correlation ID)
 - Phase 1 (Task 3) - 100% ✅ (Fiber Application + GORM + Correlation ID)
+- Phase 1 (Task 4) - 100% ✅ (Spring Boot parity with Go logic)
 - Phase 2 (Task 6) - 100% ✅ (All Go Dockerfiles)
+- Phase 2 (Task 7) - 50% ⏳ (Spring JVM Dockerfile ready; Quarkus pending)
 - Phase 2 (Task 8) - 100% ✅ (Database)
 - **MAC OS VARIANT SETUP:** 100% ✅
 - **DATABASE ACCESS MIGRATION:** 100% ✅ (Both apps now use GORM)
@@ -183,6 +185,12 @@
    - Enhanced debugging and observability
    - Support for distributed system tracing
    - Enterprise-grade API design patterns
+
+✅ **Spring Boot Parity**: Spring application mirrors Go logic
+   - Identical SHA-256 CPU workload (1000 iterations)
+   - Pessimistic locking + transactional flow matches Gin/Fiber
+   - Snake_case JSON responses aligned for test harness
+   - Arm64-ready Docker build using Eclipse Temurin base
 
 **READY FOR NEXT PHASE:** Java development and remaining Phase 2 tasks
 
