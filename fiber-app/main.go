@@ -136,8 +136,7 @@ func main() {
 	app.Post("/interaction", func(c *fiber.Ctx) error {
 		var req InteractionRequest
 		if err := c.BodyParser(&req); err != nil {
-			return c.Status(400).JSON(fiber.Map{"error": "Invalid request"})
-		}
+
 
 		// Validate interaction type
 		validTypes := map[string]bool{
