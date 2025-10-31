@@ -16,6 +16,19 @@ import (
 
 var db *gorm.DB
 
+// CorrelationIDMiddleware adds correlation ID to all requests
+func CorrelationIDMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// Handle correlation ID
+		correlationId := c.GetHeader("X-Correlation-ID")
+		if correlationId == "" {
+			correlationId = uuid.New().String()
+		}
+		c.Header("X-Correlation-ID", correlationId)
+		c.Next()
+	}
+}
+
 // User struct for database operations
 type User struct {
 	ID              int        `json:"id" gorm:"primaryKey;autoIncrement"`
@@ -107,6 +120,9 @@ func main() {
 	// Initialize Gin router
 	r := gin.Default()
 
+	// Add correlation ID middleware to all routes
+	r.Use(CorrelationIDMiddleware())
+
 	// API 1: GET /plaintext - Returns "Hello, World!"
 	r.GET("/plaintext", func(c *gin.Context) {
 		c.String(http.StatusOK, "Hello, World!")
@@ -119,14 +135,6 @@ func main() {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON"})
 			return
 		}
-
-		// Handle correlation ID
-		correlationId := c.GetHeader("X-Correlation-ID")
-		if correlationId == "" {
-			correlationId = uuid.New().String()
-		}
-		c.Header("X-Correlation-ID", correlationId)
-
 		c.JSON(http.StatusOK, StatusResponse{Status: "ok"})
 	})
 

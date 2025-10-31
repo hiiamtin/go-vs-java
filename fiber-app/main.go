@@ -15,6 +15,17 @@ import (
 
 var db *gorm.DB
 
+// CorrelationIDMiddleware adds correlation ID to all requests
+func CorrelationIDMiddleware(c *fiber.Ctx) error {
+	// Handle correlation ID
+	correlationId := c.Get("X-Correlation-ID")
+	if correlationId == "" {
+		correlationId = uuid.New().String()
+	}
+	c.Set("X-Correlation-ID", correlationId)
+	return c.Next()
+}
+
 // User struct for database operations
 type User struct {
 	ID              int        `json:"id" gorm:"primaryKey;autoIncrement"`
@@ -106,6 +117,9 @@ func main() {
 	// Initialize Fiber app
 	app := fiber.New()
 
+	// Add correlation ID middleware to all routes
+	app.Use(CorrelationIDMiddleware)
+
 	// API 1: GET /plaintext - Returns "Hello, World!"
 	app.Get("/plaintext", func(c *fiber.Ctx) error {
 		return c.SendString("Hello, World!")
@@ -117,13 +131,6 @@ func main() {
 		if err := c.BodyParser(&jsonBody); err != nil {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid JSON"})
 		}
-
-		// Handle correlation ID
-		correlationId := c.Get("X-Correlation-ID")
-		if correlationId == "" {
-			correlationId = uuid.New().String()
-		}
-		c.Set("X-Correlation-ID", correlationId)
 
 		return c.Status(fiber.StatusOK).JSON(StatusResponse{Status: "ok"})
 	})
