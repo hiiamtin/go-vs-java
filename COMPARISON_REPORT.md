@@ -26,7 +26,15 @@ Disclaimer: All tests were conducted on a single Mac OS machine (Apple Silicon).
 |  | Mem (Under Load) (MiB) | 32.75 | 21.74 | 606.10 | 81.50 | 175.50 |
 
 
+**Framework Selection Guide**
+- **Go - Gin**: Choose when startup time and lean memory usage dominate, and you need predictable JSON/plaintext throughput with minimal runtime overhead (cold starts, small services, edge deployments).
+- **Go - Fiber**: Prefer when maximum Go throughput and low latency are required, especially for lightweight JSON/DB workloads, while still keeping resource usage modest.
+- **Java - Spring JVM**: Use when you rely on Spring ecosystem / JPA maturity and can trade higher memory for rich enterprise features and predictable database performance.
+- **Java - Quarkus Native**: Ideal for cloud-native scenarios demanding fast cold starts and minimal idle memory, primarily for mixed workloads where CPU-heavy paths are secondary.
+- **Java - Quarkus JVM**: Consider when CPU-bound throughput and JVM tooling outweigh the costs of larger images and higher idle memory—essentially when JIT benefits are critical.
+
 **Analysis & Notes**
+
 - **Go - Gin**
   - Pros: Instant startup, minimal idle footprint (~22 MiB), and competitive throughput (≈1.7k RPS realistic, 5.5k RPS DB) with stable JSON/plaintext numbers.
   - Cons: Transaction p99 remains ~150 ms—slower than Fiber—suggesting additional tuning (prepared statements already enabled) or more CPU headroom may be needed.
