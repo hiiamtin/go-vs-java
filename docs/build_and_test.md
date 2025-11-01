@@ -95,7 +95,7 @@ To reproduce the Phase 3 measurements end-to-end:
 ./scripts/run_phase3_load_tests.sh
 ```
 
-The script sequentially tests Gin, Fiber, Spring, and Quarkus images, saving k6 summaries, logs, and Docker stats under `phase3-results/<app>/`.
+The script sequentially tests Gin, Fiber, Spring, and Quarkus images, saving k6 summaries, logs, and Docker stats under `phase3-results/<app>/`. Previous results are moved to `phase3-results/archive/` with a UTC timestamp for reference.
 
 ## Report Generation
 

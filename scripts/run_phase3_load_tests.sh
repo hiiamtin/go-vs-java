@@ -92,6 +92,12 @@ run_test_suite() {
   local health_url="$3"
   local outdir="$RESULTS_DIR/$app_name"
 
+  if [[ -d "$outdir" ]]; then
+    local stamp
+    stamp="$(date --utc +'%Y%m%dT%H%M%SZ')"
+    mkdir -p "$RESULTS_DIR/archive"
+    mv "$outdir" "$RESULTS_DIR/archive/${app_name}_${stamp}"
+  fi
   rm -rf "$outdir"
   mkdir -p "$outdir"
 
