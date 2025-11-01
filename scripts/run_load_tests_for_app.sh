@@ -40,7 +40,7 @@ case "$APP_KEY" in
     HEALTH_URL="http://localhost:8080/health"
     ;;
   quarkus)
-    IMAGE="poc-quarkus-native"
+    IMAGE="${QUARKUS_IMAGE:-poc-quarkus-native}"
     HEALTH_URL="http://localhost:8080/health"
     ;;
   *)
