@@ -25,6 +25,8 @@ Disclaimer: All tests were conducted on a single Mac OS machine (Apple Silicon).
 |  | p99 Latency (ms) | 18.98 | 13.67 | 109.25 | 73.97 |
 |  | Mem (Under Load) (MiB) | 32.75 | 21.74 | 606.10 | 81.50 |
 
+> **Quarkus JVM (reference)** — Running the same load against the JVM build (`poc-quarkus-jvm`) yields: startup 4 s, idle ~175 MiB, interaction 1475 RPS (p99 179 ms), DB 4613 RPS, JSON 4524 RPS, CPU 1503 RPS (p99 197 ms), and plaintext 10,702 RPS. This highlights the native-vs-JVM CPU trade-off: JVM delivers ~4× higher CPU throughput at the cost of image size (+200 MB) and memory usage (+160 MiB idle).
+
 **Analysis & Notes**
 - **Go - Gin**
   - Pros: Instant startup, minimal idle footprint (~22 MiB), and competitive throughput (≈1.7k RPS realistic, 5.5k RPS DB) with stable JSON/plaintext numbers.
