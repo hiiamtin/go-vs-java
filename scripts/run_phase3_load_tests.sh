@@ -27,6 +27,11 @@ TESTS=(plaintext json cpu db interaction)
 
 SUMMARY_TREND="avg,min,med,max,p(90),p(95),p(99)"
 
+TOTAL_APPS=${#APPS[@]}
+TOTAL_TESTS=${#TESTS[@]}
+TOTAL_STEPS=$((TOTAL_APPS * (TOTAL_TESTS + 1)))
+CURRENT_STEP=0
+
 ensure_network() {
   if ! docker network ls --format '{{.Name}}' | grep -qx "$NETWORK_NAME"; then
     docker network create "$NETWORK_NAME" >/dev/null
@@ -59,6 +64,13 @@ wait_for_health() {
 capture_idle_stats() {
   local outfile="$1"
   docker stats "$CONTAINER_NAME" --no-stream >"$outfile"
+}
+
+progress() {
+  local message="$1"
+  CURRENT_STEP=$((CURRENT_STEP + 1))
+  local percent=$((CURRENT_STEP * 100 / TOTAL_STEPS))
+  printf '[%3d%%] %s\n' "$percent" "$message"
 }
 
 capture_metadata() {
@@ -120,6 +132,7 @@ run_test_suite() {
   end_ts=$(date +%s)
   startup_seconds=$((end_ts - start_ts))
   echo "    Startup time: ${startup_seconds}s"
+  progress "Startup completed for $app_name"
 
   capture_metadata "$app_name" "$startup_seconds" "$image" "$outdir"
   capture_idle_stats "$outdir/idle_stats.txt"
@@ -150,6 +163,7 @@ run_test_suite() {
     docker stats "$CONTAINER_NAME" --no-stream >"$stats" || true
 
     wait "$k6_pid"
+    progress "Completed $test test for $app_name"
   done
 
   docker stop "$CONTAINER_NAME" >/dev/null 2>&1 || true
