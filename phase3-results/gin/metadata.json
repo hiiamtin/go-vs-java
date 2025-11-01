@@ -1,0 +1,8 @@
+{
+  "app": "gin",
+  "image": "poc-gin",
+  "startup_seconds": 1,
+  "image_architecture": "arm64",
+  "image_size_bytes": 36650213,
+  "generated_at": "2025-11-01T01:27:39Z"
+}

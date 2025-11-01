@@ -1,150 +1,150 @@
 {
   "gin": {
     "interaction": {
-      "rps": 479.6119607382094,
-      "p99": 580.23982,
+      "rps": 1705.8478249167601,
+      "p99": 148.88367999999994,
       "fail_rate": null,
-      "cpu_under_load": 101.25,
-      "mem_under_load_mib": 33.33
+      "cpu_under_load": 110.12,
+      "mem_under_load_mib": 43.6
     },
     "db": {
-      "rps": 657.446754974741,
-      "p99": 493.89311,
+      "rps": 5525.977520608783,
+      "p99": 69.254,
       "fail_rate": null,
-      "cpu_under_load": 102.37,
-      "mem_under_load_mib": 32.55
+      "cpu_under_load": 106.1,
+      "mem_under_load_mib": 42.16
     },
     "json": {
-      "rps": 5594.53152639425,
-      "p99": 68.15129999999999,
+      "rps": 5754.837680484812,
+      "p99": 67.771,
       "fail_rate": null,
-      "cpu_under_load": 102.08,
-      "mem_under_load_mib": 15.07
+      "cpu_under_load": 99.84,
+      "mem_under_load_mib": 35.81
     },
     "cpu": {
-      "rps": 1948.5420232293864,
-      "p99": 204.48595,
+      "rps": 1926.555571849354,
+      "p99": 209.42175999999995,
       "fail_rate": null,
-      "cpu_under_load": 102.76,
-      "mem_under_load_mib": 22.75
+      "cpu_under_load": 99.73,
+      "mem_under_load_mib": 39.87
     },
     "plaintext": {
-      "rps": 13639.210887056886,
-      "p99": 19.163009999999975,
+      "rps": 14428.642865616104,
+      "p99": 18.984,
       "fail_rate": null,
-      "cpu_under_load": 100.66,
-      "mem_under_load_mib": 15.51
+      "cpu_under_load": 102.45,
+      "mem_under_load_mib": 32.75
     }
   },
   "fiber": {
     "interaction": {
-      "rps": 525.8084938914203,
-      "p99": 521.76254,
+      "rps": 1798.8219284958902,
+      "p99": 126.30118999999992,
       "fail_rate": null,
-      "cpu_under_load": 107.32,
-      "mem_under_load_mib": 41.4
+      "cpu_under_load": 104.89,
+      "mem_under_load_mib": 32.55
     },
     "db": {
-      "rps": 683.1235707297938,
-      "p99": 497.15804,
+      "rps": 6980.139309647485,
+      "p99": 60.15450999999999,
       "fail_rate": null,
-      "cpu_under_load": 102.06,
-      "mem_under_load_mib": 40.06
+      "cpu_under_load": 107.67,
+      "mem_under_load_mib": 32.62
     },
     "json": {
-      "rps": 7690.382370985931,
-      "p99": 57.159,
+      "rps": 7910.756184758688,
+      "p99": 56.025,
       "fail_rate": null,
-      "cpu_under_load": 103.5,
-      "mem_under_load_mib": 28.8
+      "cpu_under_load": 100.6,
+      "mem_under_load_mib": 27.84
     },
     "cpu": {
-      "rps": 2162.6797709643392,
-      "p99": 178.41727,
+      "rps": 2208.7145748228254,
+      "p99": 174.49192999999997,
       "fail_rate": null,
-      "cpu_under_load": 100.33,
-      "mem_under_load_mib": 30.07
+      "cpu_under_load": 99.51,
+      "mem_under_load_mib": 32.51
     },
     "plaintext": {
-      "rps": 15943.791247643609,
-      "p99": 16.11201999999997,
+      "rps": 15951.691286824635,
+      "p99": 13.66689999999997,
       "fail_rate": null,
-      "cpu_under_load": 50.67,
-      "mem_under_load_mib": 22.09
+      "cpu_under_load": 48.14,
+      "mem_under_load_mib": 21.74
     }
   },
   "spring": {
     "interaction": {
-      "rps": 824.1084508798193,
-      "p99": 378.6318399999997,
+      "rps": 976.0390396568597,
+      "p99": 227.1971599999998,
       "fail_rate": null,
-      "cpu_under_load": 100.92,
-      "mem_under_load_mib": 623.3
+      "cpu_under_load": 104.34,
+      "mem_under_load_mib": 667.9
     },
     "db": {
-      "rps": 2276.0019234141,
-      "p99": 129.90639999999993,
+      "rps": 2713.693293722135,
+      "p99": 125.34707999999998,
       "fail_rate": null,
-      "cpu_under_load": 109.68,
-      "mem_under_load_mib": 598.1
+      "cpu_under_load": 104.01,
+      "mem_under_load_mib": 636.5
     },
     "json": {
-      "rps": 4171.72335587172,
-      "p99": 115.42385999999999,
+      "rps": 4193.2082792669235,
+      "p99": 119.57771999999999,
       "fail_rate": null,
-      "cpu_under_load": 100.03,
-      "mem_under_load_mib": 586.5
+      "cpu_under_load": 98.82,
+      "mem_under_load_mib": 622.9
     },
     "cpu": {
-      "rps": 1327.3984669256583,
-      "p99": 185.16787999999997,
+      "rps": 1423.9069517435978,
+      "p99": 134.10938,
       "fail_rate": null,
-      "cpu_under_load": 100.12,
-      "mem_under_load_mib": 588.0
+      "cpu_under_load": 101.76,
+      "mem_under_load_mib": 624.6
     },
     "plaintext": {
-      "rps": 5434.951675803075,
-      "p99": 114.47717999999999,
+      "rps": 5826.347577031031,
+      "p99": 109.24806999999993,
       "fail_rate": null,
-      "cpu_under_load": 90.55,
-      "mem_under_load_mib": 565.4
+      "cpu_under_load": 93.63,
+      "mem_under_load_mib": 606.1
     }
   },
   "quarkus": {
     "interaction": {
-      "rps": 873.3438091986519,
-      "p99": 210.30608,
+      "rps": 889.6902133514636,
+      "p99": 203.31496999999996,
       "fail_rate": null,
-      "cpu_under_load": 102.3,
-      "mem_under_load_mib": 106.4
+      "cpu_under_load": 103.65,
+      "mem_under_load_mib": 120.7
     },
     "db": {
-      "rps": 2847.621597210262,
-      "p99": 101.51395,
+      "rps": 3051.5802489558823,
+      "p99": 99.30161,
       "fail_rate": null,
-      "cpu_under_load": 101.13,
-      "mem_under_load_mib": 91.22
+      "cpu_under_load": 100.34,
+      "mem_under_load_mib": 99.08
     },
     "json": {
-      "rps": 3334.7460686215636,
-      "p99": 94.44796999999997,
+      "rps": 3410.712644326428,
+      "p99": 93.16181999999999,
       "fail_rate": null,
-      "cpu_under_load": 106.35,
-      "mem_under_load_mib": 87.43
+      "cpu_under_load": 104.53,
+      "mem_under_load_mib": 105.3
     },
     "cpu": {
-      "rps": 314.24703127077714,
-      "p99": 794.7442799999999,
+      "rps": 385.9502416992496,
+      "p99": 607.776,
       "fail_rate": null,
-      "cpu_under_load": 104.63,
-      "mem_under_load_mib": 85.84
+      "cpu_under_load": 100.89,
+      "mem_under_load_mib": 73.96
     },
     "plaintext": {
-      "rps": 6193.82809838118,
-      "p99": 74.09985999999998,
+      "rps": 6233.905860920162,
+      "p99": 73.96827999999998,
       "fail_rate": null,
-      "cpu_under_load": 103.73,
-      "mem_under_load_mib": 58.98
+      "cpu_under_load": 103.48,
+      "mem_under_load_mib": 81.5
     }
   }
 }

@@ -1,0 +1,8 @@
+{
+  "app": "quarkus",
+  "image": "poc-quarkus-native",
+  "startup_seconds": 2,
+  "image_architecture": "arm64",
+  "image_size_bytes": 115939210,
+  "generated_at": "2025-11-01T02:21:12Z"
+}
