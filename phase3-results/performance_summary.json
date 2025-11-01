@@ -146,5 +146,42 @@
       "cpu_under_load": 103.48,
       "mem_under_load_mib": 81.5
     }
+  },
+  "quarkus-jvm": {
+    "interaction": {
+      "rps": 1475.2558108709175,
+      "p99": 179.139,
+      "fail_rate": null,
+      "cpu_under_load": 102.51,
+      "mem_under_load_mib": 272.6
+    },
+    "db": {
+      "rps": 4612.611689743599,
+      "p99": 86.72756,
+      "fail_rate": null,
+      "cpu_under_load": 105.84,
+      "mem_under_load_mib": 237.7
+    },
+    "json": {
+      "rps": 4524.078722941152,
+      "p99": 82.27431,
+      "fail_rate": null,
+      "cpu_under_load": 101.57,
+      "mem_under_load_mib": 208.1
+    },
+    "cpu": {
+      "rps": 1502.771057793313,
+      "p99": 197.4957,
+      "fail_rate": null,
+      "cpu_under_load": 100.7,
+      "mem_under_load_mib": 219.7
+    },
+    "plaintext": {
+      "rps": 10702.0097323759,
+      "p99": 45.841,
+      "fail_rate": null,
+      "cpu_under_load": 100.55,
+      "mem_under_load_mib": 175.5
+    }
   }
 }
