@@ -21,6 +21,7 @@ import jakarta.ws.rs.core.Response;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import org.jboss.resteasy.reactive.server.annotations.Blocking;
 
 @Path("/")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -48,6 +49,7 @@ public class PocResource {
 
     @POST
     @Path("/cpu")
+    @Blocking
     public Response cpu(@Valid CPURequest request) {
         String result = CpuWork.perform(request.getName());
         return Response.ok(new CPUResponse(result)).build();
