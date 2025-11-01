@@ -38,3 +38,8 @@ Disclaimer: All tests were conducted on a single Mac OS machine (Apple Silicon).
 - **Java - Quarkus Native**
   - Pros: Best overall throughput on transaction and database tests with modest memory; near-native startup time.
   - Cons: CPU-intensive workload performance lags markedly (low RPS, high p99); requires GraalVM/native build pipeline upkeep.
+
+**Issue Log & Resolutions**
+- **Gin & Fiber (Go)** – Initial `/db` and `/interaction` tests were connection-pool bound (default 2 idle/open connections). Resolved by enabling prepared statements and setting `MaxOpenConns/MaxIdleConns=50` with 5 m/2 m lifetimes.
+- **Spring Boot (Java)** – CamelCase payloads (`customerId`) failed JSON binding once snake_case serialization was enabled. Added `@JsonAlias("customerId")` so both casings map to the DTO.
+- **Quarkus Native (Java)** – `/cpu` endpoint executed on the event loop thread, limiting concurrency (~300 RPS). Annotated the handler with `@Blocking` to shift heavy hashing to the worker pool, recovering throughput.
