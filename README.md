@@ -64,6 +64,9 @@ All endpoints propagate or generate `X-Correlation-ID` headers for traceability.
 
 ## Testing & Data Capture
 - Runner: `k6` with shared correlation ID helper; scripts live in `load-tests/`.
+- Automation:
+  - `scripts/run_phase3_load_tests.sh` executes the full suite (Gin → Fiber → Spring → Quarkus) and archives previous results.
+  - `scripts/run_load_tests_{gin|fiber|spring|quarkus}.sh` target a single service via the shared helper `run_load_tests_for_app.sh`.
 - Metrics: RPS, p90/p95/p99 latency (exported JSON), plus simultaneous
   `docker stats --no-stream` snapshots for CPU & memory.
 - Artifacts: Raw outputs stored in `phase3-results/` and summarized in
@@ -71,6 +74,8 @@ All endpoints propagate or generate `X-Correlation-ID` headers for traceability.
 - Database: PostgreSQL 15-alpine with schema/seed in `database/`.
 - Environment setup: `docker-compose up -d db` then run each app with
   `docker run ... --net poc-net --cpus=1.0 --memory=1g`.
+
+See `docs/build_and_test.md` for command-by-command instructions.
 
 ## Deliverables
 - Four parity applications (Gin, Fiber, Spring JVM, Quarkus Native)
