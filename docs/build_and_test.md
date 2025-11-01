@@ -87,7 +87,7 @@ k6 run interaction_test.js
 
 For standardized measurements (1 m ramp-up, 2 m hold, 30 s ramp-down) run each script while capturing container stats `docker stats poc-app --no-stream`.
 
-### Automated runner
+### Automated runners
 
 To reproduce the Phase 3 measurements end-to-end:
 
@@ -96,6 +96,14 @@ To reproduce the Phase 3 measurements end-to-end:
 ```
 
 The script sequentially tests Gin, Fiber, Spring, and Quarkus images, saving k6 summaries, logs, and Docker stats under `phase3-results/<app>/`. Previous results are moved to `phase3-results/archive/` with a UTC timestamp for reference.
+
+To run a subset for a single service:
+
+```bash
+./scripts/run_load_tests_gin.sh       # or _fiber / _spring / _quarkus
+```
+
+These wrappers call `run_load_tests_for_app.sh <app>` and follow the same storage/archive conventions.
 
 ## Report Generation
 
