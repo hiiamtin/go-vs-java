@@ -64,6 +64,14 @@ SUMMARY_TREND="avg,min,med,max,p(90),p(95),p(99)"
 TOTAL_STEPS=$((${#TESTS[@]} + 1))
 CURRENT_STEP=0
 
+utc_now_iso() {
+  date -u +"%Y-%m-%dT%H:%M:%SZ"
+}
+
+utc_stamp() {
+  date -u +"%Y%m%dT%H%M%SZ"
+}
+
 ensure_network() {
   if ! docker network ls --format '{{.Name}}' | grep -qx "$NETWORK_NAME"; then
     docker network create "$NETWORK_NAME" >/dev/null
@@ -125,7 +133,7 @@ capture_metadata() {
   "startup_seconds": $startup,
   "image_architecture": "$arch",
   "image_size_bytes": $size,
-  "generated_at": "$(date --utc +'%Y-%m-%dT%H:%M:%SZ')"
+  "generated_at": "$(utc_now_iso)"
 }
 EOF
 }
@@ -138,7 +146,7 @@ run_tests() {
 
   if [[ -d "$outdir" ]]; then
     local stamp
-    stamp="$(date --utc +'%Y%m%dT%H%M%SZ')"
+    stamp="$(utc_stamp)"
     mkdir -p "$RESULTS_DIR/archive"
     mv "$outdir" "$RESULTS_DIR/archive/${app_name}_${stamp}"
   fi
