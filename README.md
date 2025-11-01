@@ -85,8 +85,24 @@ See `docs/build_and_test.md` for command-by-command instructions.
 - `COMPARISON_REPORT.md` summarizing startup time, image size,
   throughput, latency, memory, and pros/cons
 
-## Next Actions
-1. Project manager to complete Task 14 final review of the report and methodology notes.
-2. Optionally rerun k6 scenarios after any tuning changes (e.g., alternate pool sizes).
-3. Consider follow-up experiments (more VUs, multi-host setup) using the existing
-   scripts and Docker artifacts as a baseline.
+
+## Summary Of Results
+
+## Summary Of Results
+
+| Framework | Startup (s) | Idle Mem (MiB) | Runtime Variant |
+| :--- | ---: | ---: | :--- |
+| Go - Gin | 1 | 22.3 | Native |
+| Go - Fiber | 2 | 17.9 | Native |
+| Java - Spring JVM | 17 | 394.4 | JVM |
+| Java - Quarkus Native | 1 | 10.1 | Native |
+| Java - Quarkus JVM | 4 | 175.5 | JVM |
+
+| Test | Metric | Gin | Fiber | Spring | Quarkus Native | Quarkus JVM |
+| :--- | :--- | ---: | ---: | ---: | ---: | ---: |
+| Realistic Transaction | Avg RPS | 1706 | 1799 | 976 | 890 | 1475 |
+|  | p99 (ms) | 148.9 | 126.3 | 227.2 | 203.3 | 179.1 |
+| Database I/O | Avg RPS | 5526 | 6980 | 2714 | 3052 | 4613 |
+|  | p99 (ms) | 69.3 | 60.2 | 125.3 | 99.3 | 86.7 |
+| CPU Work | Avg RPS | 1927 | 2209 | 1424 | 386 | 1503 |
+|  | p99 (ms) | 209.4 | 174.5 | 134.1 | 607.8 | 197.5 |
