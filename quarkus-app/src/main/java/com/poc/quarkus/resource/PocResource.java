@@ -9,6 +9,7 @@ import com.poc.quarkus.model.User;
 import com.poc.quarkus.repository.UserRepository;
 import com.poc.quarkus.service.InteractionService;
 import com.poc.quarkus.util.CpuWork;
+import io.smallrye.common.annotation.Blocking;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
@@ -21,7 +22,6 @@ import jakarta.ws.rs.core.Response;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import org.jboss.resteasy.reactive.server.annotations.Blocking;
 
 @Path("/")
 @Consumes(MediaType.APPLICATION_JSON)
