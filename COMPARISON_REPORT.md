@@ -7,23 +7,23 @@ Disclaimer: All tests were conducted on a single Mac OS machine (Apple Silicon).
 | Java - Spring JVM | 17 | 334.80 | 394.40 |
 | Java - Quarkus Native | 1 | 110.57 | 10.14 |
 
-| **Test Type** | **Metric** | Go - Gin | Go - Fiber | Java - Spring JVM | Java - Quarkus Native |
-| :--- | :--- | :---: | :---: | :---: | :---: |
-| **Realistic Transaction** | **Avg. RPS** | 1706 | 1799 | 976 | 890 |
-|  | p99 Latency (ms) | 148.88 | 126.30 | 227.20 | 203.31 |
-|  | Mem (Under Load) (MiB) | 43.60 | 32.55 | 667.90 | 120.70 |
-| **Database I/O (Read)** | **Avg. RPS** | 5526 | 6980 | 2714 | 3052 |
-|  | p99 Latency (ms) | 69.25 | 60.15 | 125.35 | 99.30 |
-|  | Mem (Under Load) (MiB) | 42.16 | 32.62 | 636.50 | 99.08 |
-| **JSON Parse** | **Avg. RPS** | 5755 | 7911 | 4193 | 3411 |
-|  | p99 Latency (ms) | 67.77 | 56.02 | 119.58 | 93.16 |
-|  | Mem (Under Load) (MiB) | 35.81 | 27.84 | 622.90 | 105.30 |
-| **CPU Work** | **Avg. RPS** | 1927 | 2209 | 1424 | 386 |
-|  | p99 Latency (ms) | 209.42 | 174.49 | 134.11 | 607.78 |
-|  | Mem (Under Load) (MiB) | 39.87 | 32.51 | 624.60 | 73.96 |
-| **Plaintext** | **Avg. RPS** | 14429 | 15952 | 5826 | 6234 |
-|  | p99 Latency (ms) | 18.98 | 13.67 | 109.25 | 73.97 |
-|  | Mem (Under Load) (MiB) | 32.75 | 21.74 | 606.10 | 81.50 |
+| **Test Type** | **Metric** | Go - Gin | Go - Fiber | Java - Spring JVM | Java - Quarkus Native | Java - Quarkus JVM |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: |
+| **Realistic Transaction** | **Avg. RPS** | 1706 | 1799 | 976 | 890 | 1475 |
+|  | p99 Latency (ms) | 148.88 | 126.30 | 227.20 | 203.31 | 179.14 |
+|  | Mem (Under Load) (MiB) | 43.60 | 32.55 | 667.90 | 120.70 | 272.60 |
+| **Database I/O (Read)** | **Avg. RPS** | 5526 | 6980 | 2714 | 3052 | 4613 |
+|  | p99 Latency (ms) | 69.25 | 60.15 | 125.35 | 99.30 | 86.73 |
+|  | Mem (Under Load) (MiB) | 42.16 | 32.62 | 636.50 | 99.08 | 237.70 |
+| **JSON Parse** | **Avg. RPS** | 5755 | 7911 | 4193 | 3411 | 4524 |
+|  | p99 Latency (ms) | 67.77 | 56.02 | 119.58 | 93.16 | 82.27 |
+|  | Mem (Under Load) (MiB) | 35.81 | 27.84 | 622.90 | 105.30 | 208.10 |
+| **CPU Work** | **Avg. RPS** | 1927 | 2209 | 1424 | 386 | 1503 |
+|  | p99 Latency (ms) | 209.42 | 174.49 | 134.11 | 607.78 | 197.50 |
+|  | Mem (Under Load) (MiB) | 39.87 | 32.51 | 624.60 | 73.96 | 219.70 |
+| **Plaintext** | **Avg. RPS** | 14429 | 15952 | 5826 | 6234 | 10702 |
+|  | p99 Latency (ms) | 18.98 | 13.67 | 109.25 | 73.97 | 45.84 |
+|  | Mem (Under Load) (MiB) | 32.75 | 21.74 | 606.10 | 81.50 | 175.50 |
 
 > **Quarkus JVM (reference)** — Running the same load against the JVM build (`poc-quarkus-jvm`) yields: startup 4 s, idle ~175 MiB, interaction 1475 RPS (p99 179 ms), DB 4613 RPS, JSON 4524 RPS, CPU 1503 RPS (p99 197 ms), and plaintext 10,702 RPS. This highlights the native-vs-JVM CPU trade-off: JVM delivers ~4× higher CPU throughput at the cost of image size (+200 MB) and memory usage (+160 MiB idle).
 
