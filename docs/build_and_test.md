@@ -105,6 +105,8 @@ To run a subset for a single service:
 
 These wrappers call `run_load_tests_for_app.sh <app>` and follow the same storage/archive conventions.
 
+**Quarkus JVM mode:** set `QUARKUS_IMAGE=poc-quarkus-jvm` before invoking `run_load_tests_quarkus.sh` to benchmark the JVM build instead of the native binary.
+
 ## Report Generation
 
 Raw k6 summaries and Docker stats snapshots are stored in `phase3-results/`. Aggregate metrics are exported to `phase3-results/performance_summary.json` and summarized in `COMPARISON_REPORT.md`. Update the report only after rebuilding images and re-running load tests to maintain consistency. 
