@@ -1,7 +1,12 @@
 package com.poc.springboot.dto;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+
 public class InteractionRequest {
+
+    @JsonAlias("customerId")
     private Integer customerId;
+
     private String note;
     private String type;
 

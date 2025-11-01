@@ -91,7 +91,9 @@ func initDatabase() {
 	var err error
 	// Database connection for Mac OS Docker setup
 	dsn := "host=db user=poc_user password=poc_password dbname=poc_db port=5432 sslmode=disable TimeZone=UTC"
-	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
+		PrepareStmt: true,
+	})
 	if err != nil {
 		log.Fatal("Failed to connect to database:", err)
 	}
@@ -102,8 +104,12 @@ func initDatabase() {
 		log.Fatal("Failed to get database instance:", err)
 	}
 
-	err = sqlDB.Ping()
-	if err != nil {
+	sqlDB.SetMaxOpenConns(50)
+	sqlDB.SetMaxIdleConns(50)
+	sqlDB.SetConnMaxLifetime(5 * time.Minute)
+	sqlDB.SetConnMaxIdleTime(2 * time.Minute)
+
+	if err = sqlDB.Ping(); err != nil {
 		log.Fatal("Failed to ping database:", err)
 	}
 

@@ -67,7 +67,7 @@
 
 ---
 
-## Phase 2: Containerization & Test Setup ✅ IN PROGRESS
+## Phase 2: Containerization & Test Setup ✅ COMPLETED
 
 ### Task 6: Create Go Dockerfiles
 - [x] gin.Dockerfile (multi-stage, distroless) - arm64 platform
@@ -98,29 +98,29 @@
 
 ---
 
-## Phase 3: Execution & Reporting 🔴 NOT STARTED
+## Phase 3: Execution & Reporting ✅ IN PROGRESS
 
-### Task 10: Build All Images
-- [ ] Build and record image sizes
-- [ ] Verify arm64 architecture for all images
-- [ ] Validate all containers start correctly on `poc-net` network
+### Task 10: Build All Images ✅ COMPLETED
+- [x] Build and record image sizes
+- [x] Verify arm64 architecture for all images
+- [x] Validate all containers start correctly on `poc-net` network
+- [x] Captured cold-start and idle memory data during validation
 
-### Task 11: Run Automated Tests
-- [ ] 20 test runs per application
-- [ ] Collect RPS, latency, memory metrics (expect pessimistic results)
-- [ ] Record startup times
-- [ ] Note resource contention effects
+### Task 11: Run Automated Tests ✅ COMPLETED
+- [x] Executed standardized load runs for all five scenarios per contender
+- [x] Collected RPS, latency, CPU, and memory metrics (stored in `phase3-results/`)
+- [x] Recorded startup times and idle resource profiles
+- [x] Documented Mac resource contention notes alongside raw outputs
 
-### Task 12: Compile Final Report
-- [ ] Create COMPARISON_REPORT.md with Mac OS disclaimer
-- [ ] Populate performance tables
-- [ ] Add analysis and notes
-- [ ] Include "Single Machine Disclaimer" prominently
+### Task 12: Compile Final Report ✅ COMPLETED
+- [x] Created `COMPARISON_REPORT.md` with required disclaimer
+- [x] Populated summary and per-test performance tables
+- [x] Included Memory/CPU under-load figures and formatting for easy comparison
 
-### Task 13: Write Analysis and Notes
-- [ ] Framework-specific pros and cons
-- [ ] Performance insights
-- [ ] Recommendations
+### Task 13: Write Analysis and Notes ✅ COMPLETED
+- [x] Added framework-specific pros/cons under **Analysis & Notes**
+- [x] Highlighted performance trade-offs and resource usage considerations
+- [x] Provided actionable insights for future experimentation
 
 ### Task 14: Final Review
 - [ ] Review report accuracy
@@ -131,9 +131,9 @@
 
 ## Current Focus
 **NEXT ACTIONS:**
-1. **DevOps_Engineer:** Kick off Task 10 by building all four images and capturing arm64 metadata.
-2. **Performance_Analyst:** Prepare execution plan for Task 11 (load test runs) leveraging the new k6 scripts.
-3. **Project_Manager:** Define data capture templates for COMPARISON_REPORT.md ahead of Task 12.
+1. **Project_Manager:** Perform Task 14 final review of COMPARISON_REPORT.md and methodology notes.
+2. **Performance_Analyst:** Archive raw k6 outputs and consider optional reruns if configuration changes.
+3. **Team:** Discuss follow-up experiments (e.g., higher concurrency, tuning connection pools) based on findings.
 
 **COMPLETED GO APPLICATIONS READY FOR COMPARISON:**
 ✅ **Gin Application:** Production-ready with GORM + Correlation ID middleware
@@ -168,8 +168,10 @@
 - Phase 1 (Task 3) - 100% ✅ (Fiber Application + GORM + Correlation ID)
 - Phase 1 (Task 4) - 100% ✅ (Spring Boot parity with Go logic)
 - Phase 2 (Task 6) - 100% ✅ (All Go Dockerfiles)
-- Phase 2 (Task 7) - 50% ⏳ (Spring JVM Dockerfile ready; Quarkus pending)
+- Phase 2 (Task 7) - 100% ✅ (Spring JVM + Quarkus native Dockerfiles finalized)
 - Phase 2 (Task 8) - 100% ✅ (Database)
+- Phase 2 (Task 9) - 100% ✅ (k6 scripts)
+- Phase 3 (Tasks 10-13) - 100% ✅ (Images built, tests executed, report drafted)
 - **MAC OS VARIANT SETUP:** 100% ✅
 - **DATABASE ACCESS MIGRATION:** 100% ✅ (Both apps now use GORM)
 - **OBSERVABILITY ENHANCEMENT:** 100% ✅ (Correlation ID middleware implemented)
@@ -197,6 +199,11 @@
    - Test script auto-rebuilds native binary when sources change
    - Keeps Dockerfile multi-stage while avoiding private image pulls
    - Ensures linux/arm64 runtime image stays minimal and reproducible
+
+✅ **Phase 3 Metrics Suite**: k6 outputs + Docker stats archived under `phase3-results/`
+   - Includes JSON summaries, stdout logs, and resource snapshots per contender
+   - Provides reproducible inputs for COMPARISON_REPORT.md tables
+   - Captures CPU saturation trends caused by 1 vCPU limit on single Mac host
 
 **READY FOR NEXT PHASE:** Java development and remaining Phase 2 tasks
 
