@@ -78,6 +78,7 @@ All endpoints propagate or generate `X-Correlation-ID` headers for traceability.
 See `docs/build_and_test.md` for command-by-command instructions.
 
 ## Deliverables
+- **Performance Report**: [COMPARISON_REPORT.md](COMPARISON_REPORT.md) contains the latest load-test results, latency/memory tables, and framework-specific analysis.
 - Four parity applications (Gin, Fiber, Spring JVM, Quarkus Native)
 - Arm64-ready Dockerfiles and test scripts
 - k6 scenarios + captured metrics (`phase3-results/`)
