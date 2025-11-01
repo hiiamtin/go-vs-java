@@ -87,6 +87,16 @@ k6 run interaction_test.js
 
 For standardized measurements (1 m ramp-up, 2 m hold, 30 s ramp-down) run each script while capturing container stats `docker stats poc-app --no-stream`.
 
+### Automated runner
+
+To reproduce the Phase 3 measurements end-to-end:
+
+```bash
+./scripts/run_phase3_load_tests.sh
+```
+
+The script sequentially tests Gin, Fiber, Spring, and Quarkus images, saving k6 summaries, logs, and Docker stats under `phase3-results/<app>/`.
+
 ## Report Generation
 
 Raw k6 summaries and Docker stats snapshots are stored in `phase3-results/`. Aggregate metrics are exported to `phase3-results/performance_summary.json` and summarized in `COMPARISON_REPORT.md`. Update the report only after rebuilding images and re-running load tests to maintain consistency. 
