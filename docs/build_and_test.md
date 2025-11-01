@@ -72,6 +72,19 @@ docker run -d --name poc-app \
   --platform linux/arm64 -p 8080:8080 poc-quarkus-native
 ```
 
+### Java – Quarkus JVM (optional)
+
+```bash
+cd quarkus-app
+./mvnw package -DskipTests
+./test_with_database_jvm.sh      # optional parity test for the JVM runner
+
+docker build --platform linux/arm64 -t poc-quarkus-jvm -f quarkus-jvm.Dockerfile quarkus-app
+docker run -d --name poc-app \
+  --net poc-net --cpus=1.0 --memory=1g \
+  --platform linux/arm64 -p 8080:8080 poc-quarkus-jvm
+```
+
 ## Load Testing
 
 Load tests live in `load-tests/`. Set `BASE_URL` if targeting a remote host.
