@@ -34,11 +34,11 @@ go_vs_java/
   generator shares the host with the services.
 
 ## Phase Summary
-- **Phase 1 – Application Development** ✅  
+- **Phase 1 – Application Development** ✅
   All four services implement the shared API contract, CPU workload, and transactional logic.
-- **Phase 2 – Containerization & Test Setup** ✅  
+- **Phase 2 – Containerization & Test Setup** ✅
   Multi-stage arm64 Dockerfiles, PostgreSQL provisioning, and k6 scripts completed.
-- **Phase 3 – Execution & Reporting** ✅  
+- **Phase 3 – Execution & Reporting** ✅
   Images rebuilt, standardized load tests captured in `phase3-results/`,
   and results published in `COMPARISON_REPORT.md`. Task 14 (final review) remains.
 
@@ -52,12 +52,12 @@ go_vs_java/
 All endpoints propagate or generate `X-Correlation-ID` headers for traceability.
 
 ## Known Issues & Fixes
-- **Go (Gin & Fiber)**: Default connection pool (max 2) throttled `/db` and `/interaction`.  
+- **Go (Gin & Fiber)**: Default connection pool (max 2) throttled `/db` and `/interaction`.
   ➜ Enabled GORM prepared statements and set `MaxOpenConns/MaxIdleConns=50`
   with 5 m/2 m lifetime controls.
-- **Spring Boot**: k6 payloads send `customerId` (camelCase) while responses are snake_case.  
+- **Spring Boot**: k6 payloads send `customerId` (camelCase) while responses are snake_case.
   ➜ Added `@JsonAlias("customerId")` so both styles bind cleanly.
-- **Quarkus Native**: CPU handler blocked the event loop, collapsing throughput (~300 RPS).  
+- **Quarkus Native**: CPU handler blocked the event loop, collapsing throughput (~300 RPS).
   ➜ Marked `/cpu` with `@Blocking`, pushing the hashing work onto the worker pool.
 - **All frameworks**: Connection pool sizing standardized (50 max / 25 min where supported)
   to keep the comparison fair before running final load tests.
@@ -88,8 +88,6 @@ See `docs/build_and_test.md` for command-by-command instructions.
 
 ## Summary Of Results
 
-## Summary Of Results
-
 | Framework | Startup (s) | Idle Mem (MiB) | Runtime Variant |
 | :--- | ---: | ---: | :--- |
 | Go - Gin | 1 | 22.3 | Native |
@@ -102,7 +100,10 @@ See `docs/build_and_test.md` for command-by-command instructions.
 | :--- | :--- | ---: | ---: | ---: | ---: | ---: |
 | Realistic Transaction | Avg RPS | 1706 | 1799 | 976 | 890 | 1475 |
 |  | p99 (ms) | 148.9 | 126.3 | 227.2 | 203.3 | 179.1 |
+|  | Mem (MiB) | 43.6 | 32.5 | 667.9 | 120.7 | 272.6 |
 | Database I/O | Avg RPS | 5526 | 6980 | 2714 | 3052 | 4613 |
 |  | p99 (ms) | 69.3 | 60.2 | 125.3 | 99.3 | 86.7 |
+|  | Mem (MiB) | 42.2 | 32.6 | 636.5 | 99.1 | 237.7 |
 | CPU Work | Avg RPS | 1927 | 2209 | 1424 | 386 | 1503 |
 |  | p99 (ms) | 209.4 | 174.5 | 134.1 | 607.8 | 197.5 |
+|  | Mem (MiB) | 39.9 | 32.5 | 624.6 | 74.0 | 219.7 |
