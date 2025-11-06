@@ -96,8 +96,6 @@ See `docs/build_and_test.md` for command-by-command instructions.
 | Java - Quarkus Native | 1 | 10.1 | Native |
 | Java - Quarkus JVM | 4 | 175.5 | JVM |
 
-For visual comparisons, see [docs/performance_charts.md](docs/performance_charts.md).
-
 | Test | Metric | Gin | Fiber | Spring | Quarkus Native | Quarkus JVM |
 | :--- | :--- | ---: | ---: | ---: | ---: | ---: |
 | Realistic Transaction | Avg RPS | 1706 | 1799 | 976 | 890 | 1475 |
