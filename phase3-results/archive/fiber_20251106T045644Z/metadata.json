@@ -1,8 +1,0 @@
-{
-  "app": "fiber",
-  "image": "poc-fiber",
-  "startup_seconds": 2,
-  "image_architecture": "arm64",
-  "image_size_bytes": 24009908,
-  "generated_at": "2025-11-01T01:45:22Z"
-}

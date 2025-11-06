@@ -1,8 +1,8 @@
 {
   "app": "spring",
   "image": "poc-spring-jvm",
-  "startup_seconds": 17,
+  "startup_seconds": 14,
   "image_architecture": "arm64",
   "image_size_bytes": 351060019,
-  "generated_at": "2025-11-01T02:03:19Z"
+  "generated_at": "2025-11-06T09:20:19Z"
 }
