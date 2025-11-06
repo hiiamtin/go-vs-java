@@ -26,7 +26,7 @@ go mod tidy               # optional for local builds
 go test ./...             # optional unit tests
 ./test_with_database.sh   # builds binary, docker image, and runs smoke tests
 
-docker build --platform linux/arm64 -t poc-gin -f gin.Dockerfile gin-app
+docker build --platform linux/arm64 -t poc-gin -f gin.Dockerfile .
 docker run -d --name poc-app \
   --net poc-net --cpus=1.0 --memory=1g \
   --platform linux/arm64 -p 8080:8080 poc-gin
@@ -40,7 +40,7 @@ go mod tidy
 go test ./...
 ./test_with_database.sh
 
-docker build --platform linux/arm64 -t poc-fiber -f fiber.Dockerfile fiber-app
+docker build --platform linux/arm64 -t poc-fiber -f fiber.Dockerfile .
 docker run -d --name poc-app \
   --net poc-net --cpus=1.0 --memory=1g \
   --platform linux/arm64 -p 8080:8080 poc-fiber
@@ -53,7 +53,7 @@ cd spring-app
 ./mvnw clean package -DskipTests
 ./test_with_database.sh
 
-docker build --platform linux/arm64 -t poc-spring-jvm -f spring-jvm.Dockerfile spring-app
+docker build --platform linux/arm64 -t poc-spring-jvm -f spring-jvm.Dockerfile .
 docker run -d --name poc-app \
   --net poc-net --cpus=1.0 --memory=1g \
   --platform linux/arm64 -p 8080:8080 poc-spring-jvm
@@ -66,7 +66,7 @@ cd quarkus-app
 ./mvnw package -Dnative -DskipTests -Dquarkus.native.container-build=true
 ./test_with_database.sh      # rebuilds native runner when sources change
 
-docker build --platform linux/arm64 -t poc-quarkus-native -f quarkus-native.Dockerfile quarkus-app
+docker build --platform linux/arm64 -t poc-quarkus-native -f quarkus-native.Dockerfile .
 docker run -d --name poc-app \
   --net poc-net --cpus=1.0 --memory=1g \
   --platform linux/arm64 -p 8080:8080 poc-quarkus-native
@@ -79,7 +79,7 @@ cd quarkus-app
 ./mvnw package -DskipTests
 ./test_with_database_jvm.sh      # optional parity test for the JVM runner
 
-docker build --platform linux/arm64 -t poc-quarkus-jvm -f quarkus-jvm.Dockerfile quarkus-app
+docker build --platform linux/arm64 -t poc-quarkus-jvm -f quarkus-jvm.Dockerfile .
 docker run -d --name poc-app \
   --net poc-net --cpus=1.0 --memory=1g \
   --platform linux/arm64 -p 8080:8080 poc-quarkus-jvm
@@ -122,4 +122,4 @@ These wrappers call `run_load_tests_for_app.sh <app>` and follow the same storag
 
 ## Report Generation
 
-Raw k6 summaries and Docker stats snapshots are stored in `phase3-results/`. Aggregate metrics are exported to `phase3-results/performance_summary.json` and summarized in `COMPARISON_REPORT.md`. Update the report only after rebuilding images and re-running load tests to maintain consistency. 
+Raw k6 summaries and Docker stats snapshots are stored in `phase3-results/`. Aggregate metrics are exported to `phase3-results/performance_summary.json` and summarized in `COMPARISON_REPORT.md`. Update the report only after rebuilding images and re-running load tests to maintain consistency.

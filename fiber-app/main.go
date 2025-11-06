@@ -22,7 +22,22 @@ func CorrelationIDMiddleware(c *fiber.Ctx) error {
 	if correlationId == "" {
 		correlationId = uuid.New().String()
 	}
-	c.Set("X-Correlation-ID", correlationId)
+
+	// (Important!) "Force" Go to copy the string.
+	safeCorrID := string(correlationId)
+	// or use Fiber method (same result)
+	// safeCorrID := utils.CopyString(corrID)
+
+	//Store in request attribute for potential use in controllers
+	// This allows other handlers (such as /users) to retrieve it.
+	c.Locals("correlationID", safeCorrID)
+
+	// (Safe) Send the "safe one" into Goroutine.
+	// go func() {
+	// // (Safe) safeCorrID will always be a valid value.
+	// 	log.Println("Request received", safeCorrID)
+	// }()
+	c.Set("X-Correlation-ID", safeCorrID)
 	return c.Next()
 }
 

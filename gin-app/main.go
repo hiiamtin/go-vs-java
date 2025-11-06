@@ -24,6 +24,13 @@ func CorrelationIDMiddleware() gin.HandlerFunc {
 		if correlationId == "" {
 			correlationId = uuid.New().String()
 		}
+
+		//Store in request attribute for potential use in controllers
+		c.Set("correlationID", correlationId)
+		// id := c.GetString("correlationID")
+		//or
+		// id := c.MustGet("correlationID").(string)
+
 		c.Header("X-Correlation-ID", correlationId)
 		c.Next()
 	}

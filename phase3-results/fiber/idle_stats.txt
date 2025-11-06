@@ -1,2 +1,2 @@
-CONTAINER ID   NAME      CPU %     MEM USAGE / LIMIT   MEM %     NET I/O           BLOCK I/O     PIDS
-985f840ff236   poc-app   0.05%     17.89MiB / 1GiB     1.75%     2.61kB / 1.56kB   13.4MB / 0B   4
+CONTAINER ID   NAME      CPU %     MEM USAGE / LIMIT   MEM %     NET I/O          BLOCK I/O   PIDS
+7c72725460d7   poc-app   0.05%     5.113MiB / 1GiB     0.50%     2.65kB / 1.6kB   0B / 0B     4

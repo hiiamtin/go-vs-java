@@ -11,7 +11,7 @@ echo "==============================================="
 
 # Build Spring Boot Docker image
 echo "📦 Building Spring Boot application..."
-docker build --platform linux/arm64 -t spring-boot-app -f spring-jvm.Dockerfile .
+docker build --platform linux/arm64 -t poc-spring-boot -f spring-jvm.Dockerfile .
 
 if [ $? -ne 0 ]; then
     echo "❌ Docker build failed!"
@@ -22,22 +22,22 @@ echo "✅ Docker build successful!"
 
 # Stop existing container if running
 echo "🧹 Cleaning up existing container..."
-if docker ps -a --format '{{.Names}}' | grep -Eq '^spring-boot-app$'; then
-    docker stop spring-boot-app >/dev/null 2>&1
-    docker rm spring-boot-app >/dev/null 2>&1
+if docker ps -a --format '{{.Names}}' | grep -Eq '^poc-spring-boot$'; then
+    docker stop poc-spring-boot >/dev/null 2>&1
+    docker rm poc-spring-boot >/dev/null 2>&1
     echo "✅ Existing container removed"
 fi
 
 # Start Spring Boot application with database connection
 echo "🚀 Starting Spring Boot application on poc-net network..."
 docker run -d \
-    --name spring-boot-app \
+    --name poc-spring-boot \
     --network poc-net \
     --platform linux/arm64 \
     --cpus="1.0" \
     --memory="1g" \
     -p 8080:8080 \
-    spring-boot-app
+    poc-spring-boot
 
 if [ $? -ne 0 ]; then
     echo "❌ Failed to start Spring Boot container!"
@@ -64,9 +64,9 @@ done
 
 if [ $attempt -gt $max_attempts ]; then
     echo "❌ Application failed to become ready within 60 seconds"
-    docker logs spring-boot-app
-    docker stop spring-boot-app >/dev/null 2>&1
-    docker rm spring-boot-app >/dev/null 2>&1
+    docker logs poc-spring-boot
+    docker stop poc-spring-boot >/dev/null 2>&1
+    docker rm poc-spring-boot >/dev/null 2>&1
     exit 1
 fi
 
@@ -222,8 +222,8 @@ fi
 # Cleanup
 echo ""
 echo "🧹 Cleaning up..."
-docker stop spring-boot-app >/dev/null 2>&1
-docker rm spring-boot-app >/dev/null 2>&1
+docker stop poc-spring-boot >/dev/null 2>&1
+docker rm poc-spring-boot >/dev/null 2>&1
 
 echo ""
 echo "📊 Test Summary"

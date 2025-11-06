@@ -14,8 +14,8 @@ All containers were configured with identical resource constraints to ensure fai
 
 | Contender | Startup Time (s) | Image Size (MB) | Memory (Idle) (MiB) |
 | :--- | :---: | :---: | :---: |
-| Go - Gin | 1 | 34.95 | 22.32 |
-| Go - Fiber | 2 | 22.90 | 17.89 |
+| Go - Gin | 1 | 34.95 | 3.99 |
+| Go - Fiber | 1 | 22.90 | 5.11 |
 | Java - Spring JVM | 17 | 334.80 | 394.40 |
 | Java - Quarkus Native | 1 | 110.57 | 10.14 |
 
@@ -23,21 +23,21 @@ All containers were configured with identical resource constraints to ensure fai
 
 | Test Type | Metric | Go - Gin | Go - Fiber | Java - Spring JVM | Java - Quarkus Native | Java - Quarkus JVM |
 | :--- | :--- | ---: | ---: | ---: | ---: | ---: |
-| Realistic Transaction | Avg RPS | 1706 | 1799 | 976 | 890 | 1475 |
-|  | p99 Latency (ms) | 148.88 | 126.3 | 227.2 | 203.31 | 179.14 |
-|  | Mem (MiB) | 43.6 | 32.55 | 667.9 | 120.7 | 272.6 |
-| Database I/O (Read) | Avg RPS | 5526 | 6980 | 2714 | 3052 | 4613 |
-|  | p99 Latency (ms) | 69.25 | 60.15 | 125.35 | 99.3 | 86.73 |
-|  | Mem (MiB) | 42.16 | 32.62 | 636.5 | 99.08 | 237.7 |
-| JSON Parse | Avg RPS | 5755 | 7911 | 4193 | 3411 | 4524 |
-|  | p99 Latency (ms) | 67.77 | 56.02 | 119.58 | 93.16 | 82.27 |
-|  | Mem (MiB) | 35.81 | 27.84 | 622.9 | 105.3 | 208.1 |
-| CPU Work | Avg RPS | 1927 | 2209 | 1424 | 386 | 1503 |
-|  | p99 Latency (ms) | 209.42 | 174.49 | 134.11 | 607.78 | 197.5 |
-|  | Mem (MiB) | 39.87 | 32.51 | 624.6 | 73.96 | 219.7 |
-| Plaintext | Avg RPS | 14429 | 15952 | 5826 | 6234 | 10702 |
-|  | p99 Latency (ms) | 18.98 | 13.67 | 109.25 | 73.97 | 45.84 |
-|  | Mem (MiB) | 32.75 | 21.74 | 606.1 | 81.5 | 175.5 |
+| Realistic Transaction | Avg RPS | 1590 | 1778 | 976 | 890 | 1475 |
+|  | p99 Latency (ms) | 164.17 | 154.29 | 227.2 | 203.31 | 179.14 |
+|  | Mem (MiB) | 28.63 | 20.42 | 667.9 | 120.7 | 272.6 |
+| Database I/O (Read) | Avg RPS | 5439 | 6956 | 2714 | 3052 | 4613 |
+|  | p99 Latency (ms) | 70.16 | 61.46 | 125.35 | 99.3 | 86.73 |
+|  | Mem (MiB) | 18.07 | 18.15 | 636.5 | 99.08 | 237.7 |
+| JSON Parse | Avg RPS | 5661 | 7427 | 4193 | 3411 | 4524 |
+|  | p99 Latency (ms) | 66.49 | 56.36 | 119.58 | 93.16 | 82.27 |
+|  | Mem (MiB) | 14.88 | 14.01 | 622.9 | 105.3 | 208.1 |
+| CPU Work | Avg RPS | 1850 | 2021 | 1424 | 386 | 1503 |
+|  | p99 Latency (ms) | 220.33 | 184.76 | 134.11 | 607.78 | 197.5 |
+|  | Mem (MiB) | 17.95 | 17.76 | 624.6 | 73.96 | 219.7 |
+| Plaintext | Avg RPS | 13142 | 16704 | 5826 | 6234 | 10702 |
+|  | p99 Latency (ms) | 23.54 | 14.74 | 109.25 | 73.97 | 45.84 |
+|  | Mem (MiB) | 14.10 | 10.23 | 606.1 | 81.5 | 175.5 |
 
 
 
@@ -55,7 +55,7 @@ xychart
     title "Realistic Transaction - Average RPS"
     x-axis [Go_Gin, Go_Fiber, Spring_JVM, Quarkus_Native, Quarkus_JVM]
     y-axis "Avg RPS" 0 --> 1899
-    bar [1706, 1799, 976, 890, 1475]
+    bar [1590, 1778, 976, 890, 1475]
 ```
 
 ```mermaid
@@ -70,7 +70,7 @@ xychart
     title "Realistic Transaction - p99 Latency (ms)"
     x-axis [Go_Gin, Go_Fiber, Spring_JVM, Quarkus_Native, Quarkus_JVM]
     y-axis "p99 Latency (ms)" 0 --> 247
-    bar [148.88, 126.3, 227.2, 203.31, 179.14]
+    bar [164.17, 154.29, 227.2, 203.31, 179.14]
 ```
 
 ```mermaid
@@ -85,7 +85,7 @@ xychart
     title "Realistic Transaction - Memory Under Load (MiB)"
     x-axis [Go_Gin, Go_Fiber, Spring_JVM, Quarkus_Native, Quarkus_JVM]
     y-axis "Memory (MiB)" 0 --> 717
-    bar [43.6, 32.55, 667.9, 120.7, 272.6]
+    bar [28.63, 20.42, 667.9, 120.7, 272.6]
 ```
 
 ### Database I/O (Read)
@@ -102,7 +102,7 @@ xychart
     title "Database I/O (Read) - Average RPS"
     x-axis [Go_Gin, Go_Fiber, Spring_JVM, Quarkus_Native, Quarkus_JVM]
     y-axis "Avg RPS" 0 --> 7080
-    bar [5526, 6980, 2714, 3052, 4613]
+    bar [5439, 6956, 2714, 3052, 4613]
 ```
 
 ```mermaid
@@ -117,7 +117,7 @@ xychart
     title "Database I/O (Read) - p99 Latency (ms)"
     x-axis [Go_Gin, Go_Fiber, Spring_JVM, Quarkus_Native, Quarkus_JVM]
     y-axis "p99 Latency (ms)" 0 --> 145
-    bar [69.25, 60.15, 125.35, 99.3, 86.73]
+    bar [70.16, 61.46, 125.35, 99.3, 86.73]
 ```
 
 ```mermaid
@@ -132,7 +132,7 @@ xychart
     title "Database I/O (Read) - Memory Under Load (MiB)"
     x-axis [Go_Gin, Go_Fiber, Spring_JVM, Quarkus_Native, Quarkus_JVM]
     y-axis "Memory (MiB)" 0 --> 686
-    bar [42.16, 32.62, 636.5, 99.08, 237.7]
+    bar [18.07, 18.15, 636.5, 99.08, 237.7]
 ```
 
 ### JSON Parse
@@ -149,7 +149,7 @@ xychart
     title "JSON Parse - Average RPS"
     x-axis [Go_Gin, Go_Fiber, Spring_JVM, Quarkus_Native, Quarkus_JVM]
     y-axis "Avg RPS" 0 --> 8011
-    bar [5755, 7911, 4193, 3411, 4524]
+    bar [5661, 7427, 4193, 3411, 4524]
 ```
 
 ```mermaid
@@ -164,7 +164,7 @@ xychart
     title "JSON Parse - p99 Latency (ms)"
     x-axis [Go_Gin, Go_Fiber, Spring_JVM, Quarkus_Native, Quarkus_JVM]
     y-axis "p99 Latency (ms)" 0 --> 139
-    bar [67.77, 56.02, 119.58, 93.16, 82.27]
+    bar [66.49, 56.36, 119.58, 93.16, 82.27]
 ```
 
 ```mermaid
@@ -179,7 +179,7 @@ xychart
     title "JSON Parse - Memory Under Load (MiB)"
     x-axis [Go_Gin, Go_Fiber, Spring_JVM, Quarkus_Native, Quarkus_JVM]
     y-axis "Memory (MiB)" 0 --> 672
-    bar [35.81, 27.84, 622.9, 105.3, 208.1]
+    bar [14.88, 14.01, 622.9, 105.3, 208.1]
 ```
 
 ### CPU Work
@@ -196,7 +196,7 @@ xychart
     title "CPU Work - Average RPS"
     x-axis [Go_Gin, Go_Fiber, Spring_JVM, Quarkus_Native, Quarkus_JVM]
     y-axis "Avg RPS" 0 --> 2309
-    bar [1927, 2209, 1424, 386, 1503]
+    bar [1850, 2021, 1424, 386, 1503]
 ```
 
 ```mermaid
@@ -211,7 +211,7 @@ xychart
     title "CPU Work - p99 Latency (ms)"
     x-axis [Go_Gin, Go_Fiber, Spring_JVM, Quarkus_Native, Quarkus_JVM]
     y-axis "p99 Latency (ms)" 0 --> 627
-    bar [209.42, 174.49, 134.11, 607.78, 197.5]
+    bar [220.33, 184.76, 134.11, 607.78, 197.5]
 ```
 
 ```mermaid
@@ -226,7 +226,7 @@ xychart
     title "CPU Work - Memory Under Load (MiB)"
     x-axis [Go_Gin, Go_Fiber, Spring_JVM, Quarkus_Native, Quarkus_JVM]
     y-axis "Memory (MiB)" 0 --> 674
-    bar [39.87, 32.51, 624.6, 73.96, 219.7]
+    bar [17.95, 17.76, 624.6, 73.96, 219.7]
 ```
 
 ### Plaintext
@@ -243,7 +243,7 @@ xychart
     title "Plaintext - Average RPS"
     x-axis [Go_Gin, Go_Fiber, Spring_JVM, Quarkus_Native, Quarkus_JVM]
     y-axis "Avg RPS" 0 --> 16052
-    bar [14429, 15952, 5826, 6234, 10702]
+    bar [13142, 16704, 5826, 6234, 10702]
 ```
 
 ```mermaid
@@ -258,7 +258,7 @@ xychart
     title "Plaintext - p99 Latency (ms)"
     x-axis [Go_Gin, Go_Fiber, Spring_JVM, Quarkus_Native, Quarkus_JVM]
     y-axis "p99 Latency (ms)" 0 --> 129
-    bar [18.98, 13.67, 109.25, 73.97, 45.84]
+    bar [23.54, 14.74, 109.25, 73.97, 45.84]
 ```
 
 ```mermaid
@@ -273,7 +273,7 @@ xychart
     title "Plaintext - Memory Under Load (MiB)"
     x-axis [Go_Gin, Go_Fiber, Spring_JVM, Quarkus_Native, Quarkus_JVM]
     y-axis "Memory (MiB)" 0 --> 656
-    bar [32.75, 21.74, 606.1, 81.5, 175.5]
+    bar [14.10, 10.23, 606.1, 81.5, 175.5]
 ```
 
 **Framework Selection Guide**
@@ -286,11 +286,11 @@ xychart
 **Analysis & Notes**
 
 - **Go - Gin**
-  - Pros: Instant startup, minimal idle footprint (~22 MiB), and competitive throughput (≈1.7k RPS realistic, 5.5k RPS DB) with stable JSON/plaintext numbers.
-  - Cons: Transaction p99 remains ~150 ms—slower than Fiber—suggesting additional tuning (prepared statements already enabled) or more CPU headroom may be needed.
+  - Pros: Instant startup with an idle footprint under 4 MiB and steady throughput (~1.6k RPS realistic, 5.4k RPS DB) while keeping JSON/plaintext paths efficient.
+  - Cons: Transaction p99 drifted to ~164 ms—still slower than Fiber—indicating CPU headroom rather than connection settings is now the bottleneck.
 - **Go - Fiber**
-  - Pros: Leads overall RPS and latency in plaintext/JSON/DB tests; realistic workload tops ~1.8k RPS with p99 ≈126 ms while keeping memory under load below Gin.
-  - Cons: CPU saturation still hits 100%; benefits from additional cores or DB-side optimizations for heavier transactions.
+  - Pros: Maintains the best JSON/DB throughput (~7.4k / 7.0k RPS) and lowest working-set memory (≈10–20 MiB) with realistic load near 1.8k RPS.
+  - Cons: Transaction latency climbed to ~154 ms and CPU utilization still pegs at 100%, so further gains require more cores or query tuning.
 - **Java - Spring JVM**
   - Pros: Strong database throughput (~2.7k RPS) with moderate p99 (~125 ms) thanks to mature JPA tooling; realistic flow stays near 1k RPS.
   - Cons: Startup remains slow (17 s) and memory footprint is orders of magnitude higher (≈400 MiB idle / 600 + under load).

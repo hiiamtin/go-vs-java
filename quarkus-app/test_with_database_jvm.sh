@@ -8,8 +8,8 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
-APP_NAME="quarkus-jvm-app"
-IMAGE_NAME="quarkus-jvm-app"
+APP_NAME="poc-quarkus-jvm"
+IMAGE_NAME="poc-quarkus-jvm"
 JVM_IMAGE_TAG="poc-quarkus-jvm"
 
 echo "🧪 Testing Quarkus Application (JVM) with Database"

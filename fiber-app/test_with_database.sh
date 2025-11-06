@@ -8,7 +8,7 @@ echo "========================================="
 
 # Build Fiber application
 echo "📦 Building Fiber application..."
-docker build --platform linux/arm64 -t fiber-app -f fiber.Dockerfile .
+docker build --platform linux/arm64 -t poc-fiber -f fiber.Dockerfile .
 
 if [ $? -ne 0 ]; then
     echo "❌ Docker build failed!"
@@ -19,22 +19,22 @@ echo "✅ Docker build successful!"
 
 # Stop existing Fiber container if running
 echo "🧹 Cleaning up existing container..."
-if docker ps --format 'table {{.Names}}' | grep -q "fiber-app"; then
-    docker stop fiber-app >/dev/null 2>&1
-    docker rm fiber-app >/dev/null 2>&1
+if docker ps --format 'table {{.Names}}' | grep -q "poc-fiber"; then
+    docker stop poc-fiber >/dev/null 2>&1
+    docker rm poc-fiber >/dev/null 2>&1
     echo "✅ Existing container removed"
 fi
 
 # Start Fiber application with database connection
 echo "🚀 Starting Fiber application on poc-net network..."
 docker run -d \
-    --name fiber-app \
+    --name poc-fiber \
     --network poc-net \
     --platform linux/arm64 \
     --cpus="1.0" \
     --memory="1g" \
     -p 8080:8080 \
-    fiber-app
+    poc-fiber
 
 if [ $? -ne 0 ]; then
     echo "❌ Failed to start Fiber container!"
@@ -61,9 +61,9 @@ done
 
 if [ $attempt -gt $max_attempts ]; then
     echo "❌ Application failed to become ready within 60 seconds"
-    docker logs fiber-app
-    docker stop fiber-app
-    docker rm fiber-app
+    docker logs poc-fiber
+    docker stop poc-fiber
+    docker rm poc-fiber
     exit 1
 fi
 
@@ -219,8 +219,8 @@ fi
 # Cleanup
 echo ""
 echo "🧹 Cleaning up..."
-docker stop fiber-app >/dev/null 2>&1
-docker rm fiber-app >/dev/null 2>&1
+docker stop poc-fiber >/dev/null 2>&1
+docker rm poc-fiber >/dev/null 2>&1
 
 echo ""
 echo "📊 Test Summary"

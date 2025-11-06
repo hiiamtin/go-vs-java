@@ -1,76 +1,76 @@
 {
   "gin": {
     "interaction": {
-      "rps": 1705.8478249167601,
-      "p99": 148.88367999999994,
+      "rps": 1590.1531188067524,
+      "p99": 164.17157,
       "fail_rate": null,
-      "cpu_under_load": 110.12,
-      "mem_under_load_mib": 43.6
+      "cpu_under_load": 107.09,
+      "mem_under_load_mib": 28.63
     },
     "db": {
-      "rps": 5525.977520608783,
-      "p99": 69.254,
+      "rps": 5438.928159875709,
+      "p99": 70.15767999999998,
       "fail_rate": null,
-      "cpu_under_load": 106.1,
-      "mem_under_load_mib": 42.16
+      "cpu_under_load": 104.72,
+      "mem_under_load_mib": 18.07
     },
     "json": {
-      "rps": 5754.837680484812,
-      "p99": 67.771,
+      "rps": 5661.220864925766,
+      "p99": 66.48819999999998,
       "fail_rate": null,
-      "cpu_under_load": 99.84,
-      "mem_under_load_mib": 35.81
+      "cpu_under_load": 103.67,
+      "mem_under_load_mib": 14.88
     },
     "cpu": {
-      "rps": 1926.555571849354,
-      "p99": 209.42175999999995,
+      "rps": 1849.6685805109435,
+      "p99": 220.32969999999995,
       "fail_rate": null,
-      "cpu_under_load": 99.73,
-      "mem_under_load_mib": 39.87
+      "cpu_under_load": 100.44,
+      "mem_under_load_mib": 17.95
     },
     "plaintext": {
-      "rps": 14428.642865616104,
-      "p99": 18.984,
+      "rps": 13142.368450116346,
+      "p99": 23.544,
       "fail_rate": null,
-      "cpu_under_load": 102.45,
-      "mem_under_load_mib": 32.75
+      "cpu_under_load": 104.76,
+      "mem_under_load_mib": 14.1
     }
   },
   "fiber": {
     "interaction": {
-      "rps": 1798.8219284958902,
-      "p99": 126.30118999999992,
+      "rps": 1778.2919074973165,
+      "p99": 154.29463999999993,
       "fail_rate": null,
-      "cpu_under_load": 104.89,
-      "mem_under_load_mib": 32.55
+      "cpu_under_load": 108.43,
+      "mem_under_load_mib": 20.42
     },
     "db": {
-      "rps": 6980.139309647485,
-      "p99": 60.15450999999999,
+      "rps": 6956.177505969128,
+      "p99": 61.46073999999999,
       "fail_rate": null,
-      "cpu_under_load": 107.67,
-      "mem_under_load_mib": 32.62
+      "cpu_under_load": 107.89,
+      "mem_under_load_mib": 18.15
     },
     "json": {
-      "rps": 7910.756184758688,
-      "p99": 56.025,
+      "rps": 7427.043322139252,
+      "p99": 56.358,
       "fail_rate": null,
-      "cpu_under_load": 100.6,
-      "mem_under_load_mib": 27.84
+      "cpu_under_load": 103.76,
+      "mem_under_load_mib": 14.01
     },
     "cpu": {
-      "rps": 2208.7145748228254,
-      "p99": 174.49192999999997,
+      "rps": 2020.8075396980817,
+      "p99": 184.75938,
       "fail_rate": null,
-      "cpu_under_load": 99.51,
-      "mem_under_load_mib": 32.51
+      "cpu_under_load": 103.08,
+      "mem_under_load_mib": 17.76
     },
     "plaintext": {
-      "rps": 15951.691286824635,
-      "p99": 13.66689999999997,
+      "rps": 16703.809597695028,
+      "p99": 14.737,
       "fail_rate": null,
-      "cpu_under_load": 48.14,
-      "mem_under_load_mib": 21.74
+      "cpu_under_load": 51.27,
+      "mem_under_load_mib": 10.23
     }
   },
   "spring": {

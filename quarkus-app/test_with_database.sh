@@ -36,26 +36,26 @@ else
 fi
 
 echo "📦 Building Quarkus native runtime image..."
-docker build --platform linux/arm64 -t quarkus-native-app -f quarkus-native.Dockerfile .
+docker build --platform linux/arm64 -t poc-quarkus-native -f quarkus-native.Dockerfile .
 
 echo "✅ Docker build successful!"
 
 echo "🧹 Cleaning up any existing container..."
-if docker ps -a --format '{{.Names}}' | grep -Eq '^quarkus-native-app$'; then
-    docker stop quarkus-native-app >/dev/null 2>&1
-    docker rm quarkus-native-app >/dev/null 2>&1
+if docker ps -a --format '{{.Names}}' | grep -Eq '^poc-quarkus-native$'; then
+    docker stop poc-quarkus-native >/dev/null 2>&1
+    docker rm poc-quarkus-native >/dev/null 2>&1
     echo "✅ Existing container removed"
 fi
 
 echo "🚀 Starting Quarkus application on poc-net network..."
 docker run -d \
-    --name quarkus-native-app \
+    --name poc-quarkus-native \
     --network poc-net \
     --platform linux/arm64 \
     --cpus="1.0" \
     --memory="1g" \
     -p 8080:8080 \
-    quarkus-native-app
+    poc-quarkus-native
 
 echo "⏳ Waiting for application to be ready..."
 max_attempts=30
@@ -73,9 +73,9 @@ done
 
 if [ $attempt -gt $max_attempts ]; then
     echo "❌ Application failed to become ready within 60 seconds"
-    docker logs quarkus-native-app
-    docker stop quarkus-native-app >/dev/null 2>&1 || true
-    docker rm quarkus-native-app >/dev/null 2>&1 || true
+    docker logs poc-quarkus-native
+    docker stop poc-quarkus-native >/dev/null 2>&1 || true
+    docker rm poc-quarkus-native >/dev/null 2>&1 || true
     exit 1
 fi
 
@@ -107,7 +107,7 @@ if [ "$http_code" = "200" ] && echo "$response_body" | grep -q '"status":"ok"'; 
 else
     echo "⚠️  POST /json unexpected: HTTP $http_code, body '$response_body'"
     echo "   --- Container logs ---"
-    docker logs quarkus-native-app | tail -n 40
+    docker logs poc-quarkus-native | tail -n 40
 fi
 
 echo ""
@@ -125,7 +125,7 @@ if [ "$http_code" = "200" ] && echo "$response_body" | grep -q '"processed_name"
 else
     echo "⚠️  POST /cpu unexpected: HTTP $http_code, body '$response_body'"
     echo "   --- Container logs ---"
-    docker logs quarkus-native-app | tail -n 40
+    docker logs poc-quarkus-native | tail -n 40
 fi
 
 echo ""
@@ -183,7 +183,7 @@ fi
 
 echo ""
 echo "🧼 Cleaning up..."
-docker stop quarkus-native-app >/dev/null 2>&1 || true
-docker rm quarkus-native-app >/dev/null 2>&1 || true
+docker stop poc-quarkus-native >/dev/null 2>&1 || true
+docker rm poc-quarkus-native >/dev/null 2>&1 || true
 
 echo "🎉 All tests executed for Quarkus application!"

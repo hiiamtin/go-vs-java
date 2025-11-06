@@ -8,7 +8,7 @@ echo "========================================"
 
 # Build Gin application
 echo "📦 Building Gin application..."
-docker build --platform linux/arm64 -t gin-app -f gin.Dockerfile .
+docker build --platform linux/arm64 -t poc-gin -f gin.Dockerfile .
 
 if [ $? -ne 0 ]; then
     echo "❌ Docker build failed!"
@@ -19,22 +19,22 @@ echo "✅ Docker build successful!"
 
 # Stop existing Gin container if running
 echo "🧹 Cleaning up existing container..."
-if docker ps --format 'table {{.Names}}' | grep -q "gin-app"; then
-    docker stop gin-app >/dev/null 2>&1
-    docker rm gin-app >/dev/null 2>&1
+if docker ps --format 'table {{.Names}}' | grep -q "poc-gin"; then
+    docker stop poc-gin >/dev/null 2>&1
+    docker rm poc-gin >/dev/null 2>&1
     echo "✅ Existing container removed"
 fi
 
 # Start Gin application with database connection
 echo "🚀 Starting Gin application on poc-net network..."
 docker run -d \
-    --name gin-app \
+    --name poc-gin \
     --network poc-net \
     --platform linux/arm64 \
     --cpus="1.0" \
     --memory="1g" \
     -p 8080:8080 \
-    gin-app
+    poc-gin
 
 if [ $? -ne 0 ]; then
     echo "❌ Failed to start Gin container!"
@@ -61,9 +61,9 @@ done
 
 if [ $attempt -gt $max_attempts ]; then
     echo "❌ Application failed to become ready within 60 seconds"
-    docker logs gin-app
-    docker stop gin-app
-    docker rm gin-app
+    docker logs poc-gin
+    docker stop poc-gin
+    docker rm poc-gin
     exit 1
 fi
 
@@ -219,8 +219,8 @@ fi
 # Cleanup
 echo ""
 echo "🧹 Cleaning up..."
-docker stop gin-app >/dev/null 2>&1
-docker rm gin-app >/dev/null 2>&1
+docker stop poc-gin >/dev/null 2>&1
+docker rm poc-gin >/dev/null 2>&1
 
 echo ""
 echo "📊 Test Summary"
