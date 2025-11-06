@@ -1,11 +1,25 @@
 Disclaimer: All tests were conducted on a single Mac OS machine (Apple Silicon). The load generator (k6) and application containers ran concurrently, causing resource contention. The following results are valid for *relative comparison* only and do not represent absolute, production-level performance.
 
+## Detailed Container Resource Analysis
+
+### Container Resource Limits and Configuration
+All containers were configured with identical resource constraints to ensure fair comparison:
+- **CPU Limit**: 1.0 core (per container)
+- **Memory Limit**: 1GB (per container)
+- **Platform**: linux/arm64 (Apple Silicon optimized)
+- **Network**: Custom Docker network (`poc-net`)
+- **Database Connection**: PostgreSQL container with shared network access
+
+### Container Resource Usage
+
 | Contender | Startup Time (s) | Image Size (MB) | Memory (Idle) (MiB) |
 | :--- | :---: | :---: | :---: |
 | Go - Gin | 1 | 34.95 | 22.32 |
 | Go - Fiber | 2 | 22.90 | 17.89 |
 | Java - Spring JVM | 17 | 334.80 | 394.40 |
 | Java - Quarkus Native | 1 | 110.57 | 10.14 |
+
+## Test Results
 
 | Test Type | Metric | Go - Gin | Go - Fiber | Java - Spring JVM | Java - Quarkus Native | Java - Quarkus JVM |
 | :--- | :--- | ---: | ---: | ---: | ---: | ---: |
