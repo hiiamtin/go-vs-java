@@ -87,6 +87,7 @@ pgdata/
 # Performance test results
 performance-results/
 *.csv
+phase3-results/archive/*
 
 .quarkus/
 .m2/

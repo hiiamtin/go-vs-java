@@ -57,8 +57,8 @@ NETWORK_NAME="poc-net"
 CPU_LIMIT="1.0"
 MEMORY_LIMIT="1g"
 PORT_MAPPING="8080:8080"
-SLEEP_BEFORE_STATS=120
 HEALTH_MAX_ATTEMPTS=120
+STATS_INTERVAL=2
 TESTS=(plaintext json cpu db interaction)
 SUMMARY_TREND="avg,min,med,max,p(90),p(95),p(99)"
 TOTAL_STEPS=$((${#TESTS[@]} + 1))
@@ -113,6 +113,80 @@ capture_idle_stats() {
   docker stats "$CONTAINER_NAME" --no-stream >"$outfile"
 }
 
+summarize_stream_stats() {
+  local raw_file="$1"
+  local summary_json="$2"
+  local summary_txt="$3"
+
+  if [[ ! -s "$raw_file" ]]; then
+    cat >"$summary_json" <<'EOF'
+{
+  "samples": 0
+}
+EOF
+    cat >"$summary_txt" <<'EOF'
+Samples: 0
+CPU avg (%): n/a
+CPU max (%): n/a
+Mem avg (MiB): n/a
+Mem max (MiB): n/a
+EOF
+    return
+  fi
+
+  jq -sr '
+    def parse_cpu: (.CPUPerc | sub("%";"") | tonumber);
+    def parse_mem:
+      (try (.MemUsage | capture("^(?<val>[0-9.]+)(?<unit>[A-Za-z]+)")) catch {"val":"0","unit":"B"}) as $m
+      | ($m.unit | ascii_upcase) as $unit
+      | ($m.val | tonumber)
+        * (if $unit == "GIB" or $unit == "GB" then 1024
+           elif $unit == "MIB" or $unit == "MB" then 1
+           elif $unit == "KIB" or $unit == "KB" then 1/1024
+           elif $unit == "B" then 1/(1024*1024)
+           else 1 end);
+    if length == 0 then
+      {samples: 0}
+    else
+      (map(parse_cpu)) as $cpu
+      | (map(parse_mem)) as $mem
+      | {
+          samples: length,
+          cpu_avg: ($cpu | add / length),
+          cpu_max: ($cpu | max),
+          mem_avg_mib: ($mem | add / length),
+          mem_max_mib: ($mem | max)
+        }
+    end
+  ' "$raw_file" >"$summary_json"
+
+  local samples
+  samples=$(jq -r '.samples' "$summary_json")
+
+  if [[ "$samples" == "0" || "$samples" == "null" ]]; then
+    cat >"$summary_txt" <<'EOF'
+Samples: 0
+CPU avg (%): n/a
+CPU max (%): n/a
+Mem avg (MiB): n/a
+Mem max (MiB): n/a
+EOF
+    return
+  fi
+
+  local cpu_avg cpu_max mem_avg mem_max
+  cpu_avg=$(jq -r '.cpu_avg' "$summary_json")
+  cpu_max=$(jq -r '.cpu_max' "$summary_json")
+  mem_avg=$(jq -r '.mem_avg_mib' "$summary_json")
+  mem_max=$(jq -r '.mem_max_mib' "$summary_json")
+
+  printf "Samples: %s\n" "$samples" >"$summary_txt"
+  printf "CPU avg (%%): %.2f\n" "$cpu_avg" >>"$summary_txt"
+  printf "CPU max (%%): %.2f\n" "$cpu_max" >>"$summary_txt"
+  printf "Mem avg (MiB): %.2f\n" "$mem_avg" >>"$summary_txt"
+  printf "Mem max (MiB): %.2f\n" "$mem_max" >>"$summary_txt"
+}
+
 capture_metadata() {
   local app_name="$1"
   local startup="$2"
@@ -136,6 +210,18 @@ capture_metadata() {
   "generated_at": "$(utc_now_iso)"
 }
 EOF
+}
+
+sample_docker_stats() {
+  local monitor_pid="$1"
+  local outfile="$2"
+
+  while kill -0 "$monitor_pid" 2>/dev/null; do
+    docker stats "$CONTAINER_NAME" --no-stream --format '{{json .}}' >>"$outfile" 2>/dev/null || true
+    sleep "$STATS_INTERVAL"
+  done
+
+  docker stats "$CONTAINER_NAME" --no-stream --format '{{json .}}' >>"$outfile" 2>/dev/null || true
 }
 
 run_tests() {
@@ -186,10 +272,13 @@ run_tests() {
 
     local log="$outdir/${test}.log"
     local json="$outdir/${test}.json"
-    local stats="$outdir/${test}_stats.txt"
+    local stats_raw="$outdir/${test}_stats_raw.jsonl"
+    local stats_json="$outdir/${test}_stats_summary.json"
+    local stats_txt="$outdir/${test}_stats.txt"
 
     echo "    Running $test load test..."
 
+    : >"$stats_raw"
     (
       cd "$LOAD_TEST_DIR"
       k6 run \
@@ -199,10 +288,20 @@ run_tests() {
     ) >"$log" 2>&1 &
     local k6_pid=$!
 
-    sleep "$SLEEP_BEFORE_STATS"
-    docker stats "$CONTAINER_NAME" --no-stream >"$stats" || true
+    sample_docker_stats "$k6_pid" "$stats_raw" &
+    local stats_pid=$!
 
     wait "$k6_pid"
+    local k6_status=$?
+
+    wait "$stats_pid" 2>/dev/null || true
+
+    if [[ $k6_status -ne 0 ]]; then
+      echo "ERROR: k6 run for $test failed with exit code $k6_status (see $log)." >&2
+      exit $k6_status
+    fi
+
+    summarize_stream_stats "$stats_raw" "$stats_json" "$stats_txt"
     progress "Completed $test test for $app_name"
   done
 

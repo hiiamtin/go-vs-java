@@ -1,2 +1,5 @@
-CONTAINER ID   NAME      CPU %     MEM USAGE / LIMIT   MEM %     NET I/O           BLOCK I/O   PIDS
-2c3daa9fd0b2   poc-app   110.47%   20.38MiB / 1GiB     1.99%     5.16GB / 1.94GB   0B / 0B     9
+Samples: 54
+CPU avg (%): 101.15
+CPU max (%): 109.47
+Mem avg (MiB): 18.49
+Mem max (MiB): 19.85

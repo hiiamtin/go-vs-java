@@ -90,19 +90,19 @@ See `docs/build_and_test.md` for command-by-command instructions.
 
 | Framework | Startup (s) | Idle Mem (MiB) | Runtime Variant |
 | :--- | ---: | ---: | :--- |
-| Go - Gin | &lt;1 | 3.87 | Native |
-| Go - Fiber | 1 | 5.36 | Native |
-| Java - Spring JVM | 14 | 456.9 | JVM |
+| Go - Gin | 1 | 3.98 | Native |
+| Go - Fiber | 1 | 5.32 | Native |
+| Java - Spring JVM | 11 | 357.6 | JVM |
 | Java - Quarkus Native | 1 | 10.39 | Native |
 
 | Test | Metric | Gin | Fiber | Spring | Quarkus Native |
 | :--- | :--- | ---: | ---: | ---: | ---: |
-| Realistic Transaction | Avg. RPS | 1590 | 1778 | 976 | 890 |
-|  | p99 (ms) | 164.2 | 154.3 | 227.2 | 203.3 |
-|  | Mem (MiB) | 28.6 | 20.4 | 667.9 | 120.7 |
-| Database I/O | Avg. RPS | 5439 | 6956 | 2714 | 3052 |
-|  | p99 (ms) | 70.2 | 61.5 | 125.3 | 99.3 |
-|  | Mem (MiB) | 18.1 | 18.2 | 636.5 | 99.1 |
-| CPU Work | Avg. RPS | 1850 | 2021 | 1424 | 386 |
-|  | p99 (ms) | 220.3 | 184.8 | 134.1 | 607.8 |
-|  | Mem (MiB) | 18.0 | 17.8 | 624.6 | 74.0 |
+| Realistic Transaction | Avg. RPS | 1941 | 2466 | 1520 | 1536 |
+|  | p99 (ms) | 163.8 | 95.9 | 188.3 | 182.7 |
+|  | Mem (MiB) | 20.7 | 20.4 | 633.5 | 103.6 |
+| Database I/O | Avg. RPS | 5877 | 7512 | 3088 | 4540 |
+|  | p99 (ms) | 68.3 | 60.3 | 95.1 | 88.3 |
+|  | Mem (MiB) | 18.8 | 18.5 | 611.3 | 80.9 |
+| CPU Work | Avg. RPS | 2207 | 2556 | 1616 | 486 |
+|  | p99 (ms) | 188.3 | 154.8 | 119.4 | 497.6 |
+|  | Mem (MiB) | 16.9 | 15.9 | 588.2 | 75.4 |
